@@ -1,0 +1,21 @@
+{
+  "name": "agenda-ja",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plataforma de Agendamento de Serviços - Isaac e Paulo Cesar",
+  "workspaces": [
+    "servidor",
+    "aplicativo"
+  ],
+  "scripts": {
+    "infra:subir": "docker compose up -d",
+    "infra:parar": "docker compose down",
+    "dev:servidor": "npm --workspace=servidor run start:dev",
+    "dev:aplicativo": "npm --workspace=aplicativo run dev",
+    "banco:gerar": "npm --workspace=servidor run db:generate",
+    "banco:migrar": "npm --workspace=servidor run db:migrate",
+    "banco:studio": "npm --workspace=servidor run db:studio",
+    "testar:servidor": "npm --workspace=servidor run test",
+    "build": "npm --workspace=servidor run build && npm --workspace=aplicativo run build"
+  }
+}

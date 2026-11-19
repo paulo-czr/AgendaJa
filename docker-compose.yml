@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: agendaja-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: agendaja
+      POSTGRES_PASSWORD: agendaja_dev_password
+      POSTGRES_DB: agendaja_db
+    volumes:
+      - agendaja_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agendaja -d agendaja_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: agendaja-mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # Porta SMTP para o servidor NestJS enviar e-mails
+      - "8025:8025" # Interface Web para visualizar os e-mails em http://localhost:8025
+
+volumes:
+  agendaja_pgdata:

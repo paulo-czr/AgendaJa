@@ -1,0 +1,50 @@
+# Dependências (Node / Monorepo)
+node_modules/
+.pnpm-store/
+
+# Variáveis de ambiente e segredos (nunca versionar)
+.env
+.env.*
+!.env.example
+
+# Builds e compilação (NestJS e React)
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Logs e depuração
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testes e cobertura (Jest)
+coverage/
+.nyc_output/
+
+# Banco de dados e arquivos locais temporários
+*.sqlite
+*.sqlite3
+*.db
+.docker/
+pgdata/
+
+# IDEs, Editores e Sistema Operacional
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Cache de ferramentas (Vite, ESLint, TypeScript)
+.vite/
+.eslintcache
+.cache/
