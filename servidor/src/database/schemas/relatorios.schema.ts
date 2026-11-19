@@ -11,7 +11,10 @@ import { usuarios } from './usuarios.schema';
 import { servicos } from './servicos.schema';
 import { agendamentos } from './agendamentos.schema';
 
-// Tabela de Relatórios Pós-Atendimento
+/**
+ * Registro técnico pós-atendimento (laudo/observações do serviço executado).
+ * Vincula cliente, serviço, prestador executor e opcionalmente o agendamento de origem.
+ */
 export const relatorios = pgTable('relatorios', {
 	id: serial('id').primaryKey(),
 	idCliente: integer('id_cliente')
@@ -23,16 +26,19 @@ export const relatorios = pgTable('relatorios', {
 	idUsuario: integer('id_usuario')
 		.notNull()
 		.references(() => usuarios.id, { onDelete: 'restrict' }),
-	idAgendamento: integer('id_agendamento')
-		.references(() => agendamentos.id, { onDelete: 'set null' }),
+	idAgendamento: integer('id_agendamento').references(() => agendamentos.id, {
+		onDelete: 'set null',
+	}),
 	nomePrestador: varchar('nome_prestador', { length: 255 }).notNull(),
 	observacao: text('observacao'),
 	descricaoRelatorio: text('descricao_relatorio').notNull(),
-	criadoEm: timestamp('criado_em', { withTimezone: true }).defaultNow().notNull(),
-	atualizadoEm: timestamp('atualizado_em', { withTimezone: true }).defaultNow().notNull(),
+	criadoEm: timestamp('criado_em', { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	atualizadoEm: timestamp('atualizado_em', { withTimezone: true })
+		.defaultNow()
+		.notNull(),
 });
 
-// Tipos inferidos
 export type Relatorio = InferSelectModel<typeof relatorios>;
 export type NovoRelatorio = InferInsertModel<typeof relatorios>;
-

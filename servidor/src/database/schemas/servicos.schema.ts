@@ -11,7 +11,9 @@ import {
 import type { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 import { organizacoes } from './organizacoes.schema';
 
-// Tabela de Serviços
+/**
+ * Catálogo de serviços oferecidos pelas organizações aos clientes, definindo preço e tempo estimado.
+ */
 export const servicos = pgTable('servicos', {
 	id: serial('id').primaryKey(),
 	idOrganizacao: integer('id_organizacao')
@@ -22,11 +24,13 @@ export const servicos = pgTable('servicos', {
 	preco: numeric('preco', { precision: 10, scale: 2 }).notNull(),
 	duracaoMinutos: integer('duracao_minutos').notNull(),
 	ativo: boolean('ativo').default(true).notNull(),
-	criadoEm: timestamp('criado_em', { withTimezone: true }).defaultNow().notNull(),
-	atualizadoEm: timestamp('atualizado_em', { withTimezone: true }).defaultNow().notNull(),
+	criadoEm: timestamp('criado_em', { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	atualizadoEm: timestamp('atualizado_em', { withTimezone: true })
+		.defaultNow()
+		.notNull(),
 });
 
-// Tipos inferidos
 export type Servico = InferSelectModel<typeof servicos>;
 export type NovoServico = InferInsertModel<typeof servicos>;
-

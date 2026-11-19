@@ -2,11 +2,16 @@ import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import * as schema from './schemas';
+import * as schema from './schemas/index';
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 dotenv.config();
 
+/**
+ * Povoa o banco de dados com registros essenciais para desenvolvimento e validação manual.
+ * Insere usuários de teste (cliente e prestador), organização, grade semanal, serviços,
+ * agendamento e relatório técnico.
+ */
 async function semear() {
 	const connectionString =
 		process.env.DATABASE_URL ||
@@ -18,13 +23,12 @@ async function semear() {
 	console.log('Iniciando povoamento (seed) do banco de dados...');
 
 	try {
-		// 1. Criação de Usuários
 		const [prestador] = await db
 			.insert(schema.usuarios)
 			.values({
 				nome: 'Carlos Prestador',
 				email: 'carlos@agendaja.com',
-				senhaHash: '$2b$10$exemploHashSenhaSegura123456', // Exemplo de hash
+				senhaHash: '$2b$10$exemploHashSenhaSegura123456',
 				telefone: '11999998888',
 				role: 'prestador',
 				emailVerificado: true,
@@ -43,9 +47,10 @@ async function semear() {
 			})
 			.returning();
 
-		console.log(`Usuários criados: ${prestador.nome} (Prestador) e ${cliente.nome} (Cliente)`);
+		console.log(
+			`Usuários criados: ${prestador.nome} (Prestador) e ${cliente.nome} (Cliente)`,
+		);
 
-		// 2. Criação da Organização do Prestador
 		const [organizacao] = await db
 			.insert(schema.organizacoes)
 			.values({
@@ -53,13 +58,13 @@ async function semear() {
 				nomeFantasia: 'Estética Automotiva Brilho Já',
 				documento: '12345678000199',
 				endereco: 'Av. Paulista, 1000 - Bela Vista, São Paulo - SP',
-				capacidadeSimultanea: 2, // Suporta até 2 atendimentos simultâneos
+				capacidadeSimultanea: 2, // Suporta até 2 atendimentos simultâneos (Artigo 5.2)
 			})
 			.returning();
 
 		console.log(`Organização criada: ${organizacao.nomeFantasia}`);
 
-		// 3. Configurações Semanais da Agenda (Segunda a Sábado, das 08:00 às 18:00)
+		// Grade padrão: Segunda (1) a Sábado (6), 08:00 às 18:00
 		for (let dia = 1; dia <= 6; dia++) {
 			await db.insert(schema.configuracoesAgenda).values({
 				idOrganizacao: organizacao.id,
@@ -72,13 +77,13 @@ async function semear() {
 
 		console.log('Configurações de agenda semanal criadas (Segunda a Sábado).');
 
-		// 4. Criação de Serviços
 		const [servicoLavagem] = await db
 			.insert(schema.servicos)
 			.values({
 				idOrganizacao: organizacao.id,
 				nomeServico: 'Lavagem Completa com Cera',
-				descricaoServico: 'Higienização interna, lavagem de pintura e aplicação de cera protetora.',
+				descricaoServico:
+					'Higienização interna, lavagem de pintura e aplicação de cera protetora.',
 				preco: '80.00',
 				duracaoMinutos: 60,
 				ativo: true,
@@ -97,11 +102,12 @@ async function semear() {
 			})
 			.returning();
 
-		console.log(`Serviços cadastrados: ${servicoLavagem.nomeServico}, ${servicoPolimento.nomeServico}`);
+		console.log(
+			`Serviços cadastrados: ${servicoLavagem.nomeServico}, ${servicoPolimento.nomeServico}`,
+		);
 
-		// 5. Criação de Agendamento Exemplo
 		const agora = new Date();
-		const inicioAgendamento = new Date(agora.getTime() + 24 * 60 * 60 * 1000); // Amanhã
+		const inicioAgendamento = new Date(agora.getTime() + 24 * 60 * 60 * 1000);
 		inicioAgendamento.setHours(10, 0, 0, 0);
 
 		const fimAgendamento = new Date(inicioAgendamento.getTime() + 60 * 60 * 1000);
@@ -118,9 +124,10 @@ async function semear() {
 			})
 			.returning();
 
-		console.log(`Agendamento de exemplo criado para ${cliente.nome} no dia ${inicioAgendamento.toLocaleDateString()}`);
+		console.log(
+			`Agendamento de exemplo criado para ${cliente.nome} no dia ${inicioAgendamento.toLocaleDateString()}`,
+		);
 
-		// 6. Relatório Pós-Atendimento Exemplo
 		await db.insert(schema.relatorios).values({
 			idCliente: cliente.id,
 			idServico: servicoLavagem.id,
@@ -128,7 +135,8 @@ async function semear() {
 			idAgendamento: agendamento.id,
 			nomePrestador: prestador.nome,
 			observacao: 'Veículo em ótimo estado de conservação.',
-			descricaoRelatorio: 'Serviço executado com sucesso: lavagem de lataria, aspiração interna e cera líquida.',
+			descricaoRelatorio:
+				'Serviço executado com sucesso: lavagem de lataria, aspiração interna e cera líquida.',
 		});
 
 		console.log('Relatório pós-atendimento de exemplo criado.');
@@ -141,4 +149,3 @@ async function semear() {
 }
 
 semear();
-

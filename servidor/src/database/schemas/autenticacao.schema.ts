@@ -9,13 +9,17 @@ import {
 import type { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 import { usuarios } from './usuarios.schema';
 
-// 1. Enums de Tipos de Token de Autenticação
+/**
+ * Tipos de tokens temporários emitidos para fluxos de autenticação e segurança.
+ */
 export const tipoTokenAutenticacaoEnum = pgEnum('tipo_token_autenticacao', [
 	'verificacao_email',
 	'recuperacao_senha',
 ]);
 
-// 2. Tabela de Tokens de Autenticação
+/**
+ * Tokens de curta duração para validação de e-mail e redefinição de senha.
+ */
 export const tokensAutenticacao = pgTable('tokens_autenticacao', {
 	id: serial('id').primaryKey(),
 	idUsuario: integer('id_usuario')
@@ -25,10 +29,9 @@ export const tokensAutenticacao = pgTable('tokens_autenticacao', {
 	tipo: tipoTokenAutenticacaoEnum('tipo').notNull(),
 	expiraEm: timestamp('expira_em', { withTimezone: true }).notNull(),
 	usadoEm: timestamp('usado_em', { withTimezone: true }),
-	criadoEm: timestamp('criado_em', { withTimezone: true }).defaultNow().notNull(),
+	criadoEm: timestamp('criado_em', { withTimezone: true })
+		.defaultNow()
+		.notNull(),
 });
 
-// Tipos inferidos
 export type TokenAutenticacao = InferSelectModel<typeof tokensAutenticacao>;
-export type NovoTokenAutenticacao = InferInsertModel<typeof tokensAutenticacao>;
-
