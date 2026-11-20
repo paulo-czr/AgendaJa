@@ -15,23 +15,23 @@
 
 ## Artigo II — Arquitetura e Organização do Monorepo
 2.1. O repositório é estruturado como um monorepo contendo obrigatoriamente duas aplicações isoladas na raiz:
-- `servidor/`: API RESTful construída em **NestJS**, **Drizzle ORM** e **PostgreSQL**.
+- `servidor/`: API RESTful construída em **NestJS**, **Drizzle ORM** e **PostgreSQL (Supabase)**.
 - `aplicativo/`: Aplicação Web SPA construída em **React**, **Tailwind CSS** e **TanStack Query**.
-2.2. **Simetria Modular:** Ambos os projetos devem adotar arquitetura modular orientada a domínios (`autenticacao`, `usuarios`, `organizacoes`, `servicos`, `agendamentos`, `configuracoes-agenda`, `relatorios`).
-2.3. **Isolamento de Camadas:** O `aplicativo` nunca se comunica diretamente com o banco de dados; toda regra de negócio crítica e validação de disponibilidade reside no `servidor`.
+2.2. **Estrutura de Diretórios Preserva-Base:** Os diretórios estruturais raiz já criados (`servidor/src/common`, `servidor/src/config`, `servidor/src/database`, `servidor/src/modules` e `aplicativo/src/app`, `aplicativo/src/components`, `aplicativo/src/lib`, `aplicativo/src/modules`, `aplicativo/src/types`) devem ser mantidos exatamente com esses nomes.
+2.3. **Simetria Modular:** Dentro de `modules/`, ambos os projetos devem adotar arquitetura modular orientada a domínios em português (`autenticacao`, `usuarios`, `organizacoes`, `servicos`, `agendamentos`, `configuracoes-agenda`, `relatorios`).
 
 ---
 
 ## Artigo III — Padrões de Código e Idioma (100% Português)
-3.1. **Idioma Único no Domínio e Código:** Todo o código autoral — incluindo nomes de arquivos, pastas, classes, métodos, variáveis, DTOs, schemas Zod, tabelas, colunas do PostgreSQL, rotas HTTP e mensagens de erro — deve ser escrito estritamente em **português** (sem acentuação em identificadores de código e banco, ex: `agendamentos`, `organizacoes`, `duracao_minutos`, `buscarDisponibilidade()`).
-3.2. *Exceção:* Palavras-chave reservadas das linguagens/frameworks (`import`, `export`, `class`, `async`, `await`, hooks nativos do React e decorators do NestJS).
-3.3. **Tipagem Estrita:** O uso de `any` é proibido em todo o repositório (`strict: true` no `tsconfig.json`).
+3.1. **Idioma Único no Domínio e Código:** Com exceção das pastas estruturais já existentes (`common`, `config`, `database`, `modules`, `app`, `components`, `lib`, `types`) e palavras-chave reservadas das linguagens/frameworks, todo o código autoral — incluindo nomes de novos arquivos, subpastas de domínio, classes, métodos, variáveis, DTOs, schemas Zod, tabelas, colunas do PostgreSQL, rotas HTTP e mensagens de erro — deve ser escrito estritamente em **português** (sem acentuação em identificadores de código e banco, ex: `agendamentos`, `organizacoes`, `duracao_minutos`, `buscarDisponibilidade()`).
+3.2. **Tipagem Estrita:** O uso de `any` é proibido em todo o repositório (`strict: true` no `tsconfig.json`).
 
 ---
 
-## Artigo IV — Contratos, Validação e Persistência
+## Artigo IV — Contratos, Validação, Persistência e E-mail
 4.1. **Validação com Zod (`nestjs-zod`):** Todos os payloads de entrada (Body, Query, Params) e contratos de resposta no `servidor` devem ser validados via schemas **Zod** integrados ao NestJS através do `nestjs-zod`.
-4.2. **Persistência com Drizzle ORM:** Toda alteração estrutural no PostgreSQL deve ser declarada nos schemas do Drizzle (`servidor/src/banco-dados/schemas/`) e versionada via migrations geradas pelo `drizzle-kit`. Queries SQL puras só são permitidas mediante justificativa técnica documentada no `plan.md`.
+4.2. **Persistência com Drizzle ORM (Supabase):** Toda alteração estrutural no PostgreSQL deve ser declarada nos schemas do Drizzle (`servidor/src/database/schemas/`) e versionada via migrations geradas pelo `drizzle-kit` em `servidor/drizzle/`.
+4.3. **Disparo de E-mails (Resend):** Todos os e-mails transacionais (verificação de conta e recuperação de senha) devem utilizar o SDK oficial do **Resend** configurado via variável de ambiente `RESEND_API_KEY`.
 
 ---
 
