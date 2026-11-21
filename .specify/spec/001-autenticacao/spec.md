@@ -15,4 +15,5 @@ Implementar o fluxo completo de cadastro, verificação de e-mail, login, renova
 - Senhas armazenadas exclusivamente com hash seguro (`argon2` ou `bcrypt`).
 - Tentativa de login com e-mail não verificado retorna HTTP `403 Forbidden` com mensagem clara.
 - Todos os payloads validados com `nestjs-zod`.
+- As migrations deve ser somente geradas, o desenvolvedor que deve aplicá-las
 - Código 100% em português conforme Constituição.
