@@ -14,8 +14,11 @@ dotenv.config();
  */
 async function semear() {
 	const connectionString =
-		process.env.DATABASE_URL ||
-		'postgresql://agendaja:agendaja_dev_password@localhost:5432/agendaja_db';
+		process.env.DATABASE_URL;
+
+	if (!connectionString) {
+		throw new Error('A variável DATABASE_URL precisa estar configurada.');
+	}
 
 	const pool = new Pool({ connectionString });
 	const db = drizzle(pool, { schema });
