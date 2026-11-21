@@ -20,7 +20,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
 		"strict": true,
-		"types": ["node", "jest", "vitest/globals"]
+		"types": ["node", "jest"]
 	},
 	"include": ["src/**/*", "drizzle.config.ts"]
 }
