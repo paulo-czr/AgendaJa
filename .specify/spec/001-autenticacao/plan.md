@@ -38,3 +38,6 @@ Pasta: `servidor/src/database/schemas/`
 - **Cliente HTTP (`aplicativo/src/lib/clienteHttp.ts`):** Instância Axios configurada com `withCredentials: true` e interceptor de renovação automática.
 - **Desacoplamento Visual:** Toda lógica de chamadas e cache (`useQuery(['usuario-atual'])`) fica isolada em `aplicativo/src/modules/autenticacao/hooks/usarAutenticacao.ts` e `aplicativo/src/modules/autenticacao/servicos/autenticacaoServico.ts`.
 - **Telas Provisórias (Wireframe):** Criar componentes mínimos em `aplicativo/src/modules/autenticacao/paginas/` (`PaginaLogin.tsx`, `PaginaCadastro.tsx`, `PaginaVerificarEmail.tsx`, `PaginaRecuperarSenha.tsx`) preparados para substituição direta pelo layout final do designer.
+
+## 4. Compatibilidade com os Schemas Existentes
+Os schemas de domínio já existentes usam chaves `serial` e referências `integer` para `usuarios.id` em organizações, agendamentos e relatórios. A autenticação mantém esse tipo para preservar a compatibilidade das relações existentes; migrar a chave para UUID exige alterar conjuntamente essas referências e não faz parte desta feature.
