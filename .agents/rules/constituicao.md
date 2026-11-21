@@ -22,9 +22,19 @@
 
 ---
 
-## Artigo III — Padrões de Código e Idioma (100% Português)
-3.1. **Idioma Único no Domínio e Código:** Com exceção das pastas estruturais já existentes (`common`, `config`, `database`, `modules`, `app`, `components`, `lib`, `types`) e palavras-chave reservadas das linguagens/frameworks, todo o código autoral — incluindo nomes de novos arquivos, subpastas de domínio, classes, métodos, variáveis, DTOs, schemas Zod, tabelas, colunas do PostgreSQL, rotas HTTP e mensagens de erro — deve ser escrito estritamente em **português** (sem acentuação em identificadores de código e banco, ex: `agendamentos`, `organizacoes`, `duracao_minutos`, `buscarDisponibilidade()`).
-3.2. **Tipagem Estrita:** O uso de `any` é proibido em todo o repositório (`strict: true` no `tsconfig.json`).
+## Artigo III — Padrões de Código e Idioma (100% Português com Sufixos NestJS)
+3.1. **Idioma Único no Domínio e Código:** Com exceção das pastas estruturais já existentes (`common`, `config`, `database`, `modules`, `app`, `components`, `lib`, `types`) e palavras-chave reservadas das linguagens/frameworks, todo o código autoral — incluindo nomes de domínios, classes, métodos, variáveis, schemas Zod, tabelas, colunas do PostgreSQL, rotas HTTP e mensagens de erro — deve ser escrito estritamente em **português** (sem acentuação em identificadores de código e banco, ex: `agendamentos`, `organizacoes`, `duracao_minutos`, `buscarDisponibilidade()`).
+3.2. **Convenção de Nomenclatura de Arquivos (NestJS e React):**
+- No `servidor/` (NestJS), o nome do arquivo deve manter o **domínio em português**, mas utilizar obrigatoriamente os **sufixos estruturais padrão do NestJS em inglês**:
+  - `.service.ts` (ex: `autenticacao.service.ts`, `email.service.ts`)
+  - `.controller.ts` (ex: `autenticacao.controller.ts`)
+  - `.module.ts` (ex: `autenticacao.module.ts`)
+  - `.dto.ts` (ex: `cadastrar.dto.ts`, `entrar.dto.ts`)
+  - `.entity.ts` (quando aplicável)
+  - `.guard.ts`, `.decorator.ts`, `.filter.ts`, `.interceptor.ts`, `.pipe.ts`
+  - `.spec.ts` (ex: `autenticacao.service.spec.ts`)
+- Da mesma forma, os sufixos das classes no NestJS devem acompanhar o padrão idiomático (ex: `AutenticacaoService`, `AutenticacaoController`, `AutenticacaoModule`, `GuardaAutenticacaoGuard`), mantendo métodos, propriedades e regras de negócio em português.
+3.3. **Tipagem Estrita:** O uso de `any` é proibido em todo o repositório (`strict: true` no `tsconfig.json`).
 
 ---
 

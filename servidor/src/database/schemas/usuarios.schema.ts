@@ -23,10 +23,10 @@ export const userRoleEnum = papelUsuarioEnum;
  */
 export const usuarios = pgTable('usuarios', {
 	id: serial('id').primaryKey(),
-	nome: varchar('nome', { length: 255 }).notNull(),
+	nome: varchar('nome', { length: 150 }).notNull(),
 	email: varchar('email', { length: 255 }).notNull().unique(),
 	senhaHash: text('senha_hash').notNull(),
-	telefone: varchar('telefone', { length: 20 }),
+	telefone: varchar('telefone', { length: 20 }).notNull(),
 	role: papelUsuarioEnum('role').default('cliente').notNull(),
 	emailVerificado: boolean('email_verificado').default(false).notNull(),
 	criadoEm: timestamp('criado_em', { withTimezone: true })
