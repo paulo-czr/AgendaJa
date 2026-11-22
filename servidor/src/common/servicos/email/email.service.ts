@@ -4,6 +4,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
+import { VerificacaoEmail } from './templates/verificacao-email';
+import { RecuperacaoSenha } from './templates/recuperacao-senha';
 
 @Injectable()
 export class EmailServico {
@@ -23,9 +25,11 @@ export class EmailServico {
 		const resultado = await this.resend.emails.send({
 			from: this.configuracao.getOrThrow<string>('RESEND_REMETENTE'),
 			to: email,
-			subject: 'Verifique seu e-mail no AgendaJá',
-			html: `<p>Olá, ${this.escaparHtml(nome)}.</p><p><a href="${link}">Verificar meu e-mail</a></p><p>O link expira em 24 horas.</p>`,
-			text: `Olá, ${nome}. Verifique seu e-mail acessando: ${link}\nO link expira em 24 horas.`,
+			subject: 'Confirme seu e-mail no AgendaJá',
+			react: VerificacaoEmail({
+				nomeUsuario: nome,
+				linkVerificacao: link,
+			}),
 		});
 
 		if (resultado.error) {
@@ -44,8 +48,10 @@ export class EmailServico {
 			from: this.configuracao.getOrThrow<string>('RESEND_REMETENTE'),
 			to: email,
 			subject: 'Redefina sua senha do AgendaJá',
-			html: `<p>Olá, ${this.escaparHtml(nome)}.</p><p><a href="${link}">Redefinir minha senha</a></p><p>O link expira em 1 hora. Se você não solicitou a redefinição, ignore este e-mail.</p>`,
-			text: `Olá, ${nome}. Redefina sua senha acessando: ${link}\nO link expira em 1 hora. Se você não solicitou a redefinição, ignore este e-mail.`,
+			react: RecuperacaoSenha({
+				nomeUsuario: nome,
+				linkRecuperacao: link,
+			}),
 		});
 
 		if (resultado.error) {
@@ -53,19 +59,5 @@ export class EmailServico {
 				'Não foi possível enviar o e-mail de recuperação.',
 			);
 		}
-	}
-
-	private escaparHtml(valor: string): string {
-		return valor.replace(/[&<>"']/g, (caractere) => {
-			const entidades: Record<string, string> = {
-				'&': '&amp;',
-				'<': '&lt;',
-				'>': '&gt;',
-				'"': '&quot;',
-				"'": '&#39;',
-			};
-
-			return entidades[caractere];
-		});
 	}
 }

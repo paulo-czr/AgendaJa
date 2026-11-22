@@ -5,4 +5,4 @@ import { EmailServico } from './email.service';
 	providers: [EmailServico],
 	exports: [EmailServico],
 })
-export class EmailModule {}
+export class EmailModule { }

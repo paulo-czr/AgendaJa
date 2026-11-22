@@ -24,7 +24,7 @@ import {
 } from '../../database/banco-dados.module';
 import { tokensAutenticacao } from '../../database/schemas/autenticacao.schema';
 import { usuarios } from '../../database/schemas/usuarios.schema';
-import { EmailServico } from '../../common/servicos/email.service';
+import { EmailServico } from '../../common/servicos/email/email.service';
 import type {
 	PapelUsuario,
 	UsuarioAutenticado,
