@@ -5,6 +5,7 @@ interface PropriedadesCampoTexto
 	rotulo: string;
 }
 
+/** Campo no padrão do formulário de agendamento do Figma. */
 export function CampoTexto({
 	rotulo,
 	id,
@@ -12,11 +13,11 @@ export function CampoTexto({
 	...propriedades
 }: PropriedadesCampoTexto) {
 	return (
-		<label className="block space-y-2 text-sm font-medium text-slate-700" htmlFor={id}>
+		<label className="block space-y-2 text-xs font-medium text-tinta" htmlFor={id}>
 			{rotulo}
 			<input
 				id={id}
-				className={`w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-slate-900 transition placeholder:text-slate-400 focus:border-marca-500 focus:outline-none ${className}`}
+				className={`h-11 w-full rounded-lg border border-borda bg-superficie px-3 text-[13px] text-tinta transition placeholder:text-tinta-suave focus:border-marca-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-marca-500/25 ${className}`}
 				{...propriedades}
 			/>
 		</label>

@@ -3,17 +3,12 @@
 @tailwind utilities;
 
 :root {
-	font-family:
-		"Segoe UI",
-		Inter,
-		system-ui,
-		-apple-system,
-		BlinkMacSystemFont,
-		sans-serif;
-	color: #17241d;
-	background: #f6f7f5;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+	color: #123449;
+	background: #f4f8f8;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -30,6 +25,6 @@ input {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible {
-	outline: 3px solid #20a464;
+	outline: 3px solid #20c9ae;
 	outline-offset: 3px;
 }
