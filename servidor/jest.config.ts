@@ -1,9 +1,9 @@
 export default {
 	rootDir: '.',
 	testRegex: '.*\\.spec\\.ts$',
-	moduleFileExtensions: ['js', 'json', 'ts'],
+	moduleFileExtensions: ['js', 'json', 'ts', 'tsx'],
 	transform: {
-		'^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
+		'^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
 	},
 	testEnvironment: 'node',
 };

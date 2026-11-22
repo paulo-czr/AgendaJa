@@ -20,7 +20,8 @@
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
 		"strict": true,
-		"types": ["node", "jest"]
+		"types": ["node", "jest"],
+		"jsx": "react-jsx"
 	},
 	"include": ["src/**/*", "drizzle.config.ts"]
 }
