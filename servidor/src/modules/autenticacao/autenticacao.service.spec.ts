@@ -7,7 +7,7 @@ import type { ConfigService } from '@nestjs/config';
 import type { JwtService } from '@nestjs/jwt';
 import bcrypt = require('bcrypt');
 import type { BancoDados } from '../../database/banco-dados.module';
-import type { EmailServico } from '../../common/servicos/email.service';
+import type { EmailServico } from '../../common/servicos/email/email.service';
 import { AutenticacaoServico } from './autenticacao.service';
 import { cadastrarSchema } from './dtos/cadastrar.dto';
 

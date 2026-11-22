@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { EmailModule } from '../../common/servicos/email.module';
+import { EmailModule } from '../../common/servicos/email/email.module';
 import { GuardaAutenticacao } from '../../common/guardas/guarda-autenticacao.guard';
 import { GuardaPapeis } from '../../common/guardas/guarda-papeis.guard';
 import { AutenticacaoControlador } from './autenticacao.controller';
@@ -22,4 +22,4 @@ import { AutenticacaoServico } from './autenticacao.service';
 	providers: [AutenticacaoServico, GuardaAutenticacao, GuardaPapeis],
 	exports: [GuardaAutenticacao, GuardaPapeis],
 })
-export class AutenticacaoModule {}
+export class AutenticacaoModule { }
