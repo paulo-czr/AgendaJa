@@ -55,14 +55,14 @@ export function PaginaLogin() {
 				/>
 				<div className="-mt-2 text-right">
 					<Link
-						className="text-sm font-medium text-marca-700 hover:text-marca-600"
+						className="text-xs font-semibold text-marca-700 hover:underline"
 						to="/recuperar-senha"
 					>
 						Esqueceu a senha?
 					</Link>
 				</div>
 				{autenticacao.entrar.isError && (
-					<p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+					<p className="rounded-lg bg-perigo-fundo px-3 py-2.5 text-xs text-perigo" role="alert">
 						{obterMensagemErro(autenticacao.entrar.error)}
 					</p>
 				)}
@@ -73,9 +73,9 @@ export function PaginaLogin() {
 					Entrar
 				</AcaoFormulario>
 			</form>
-			<p className="mt-6 text-center text-sm text-slate-500">
+			<p className="mt-6 text-center text-[13px] text-tinta-suave">
 				Ainda não tem uma conta?{' '}
-				<Link className="font-semibold text-marca-700" to="/cadastro">
+				<Link className="font-semibold text-marca-700 hover:underline" to="/cadastro">
 					Cadastre-se
 				</Link>
 			</p>
