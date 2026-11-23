@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { ProvedorAplicativo } from './ProvedorAplicativo';
 import { RotaProtegida } from '../modules/autenticacao/componentes/RotaProtegida';
 import { usarAutenticacao } from '../modules/autenticacao/hooks/usarAutenticacao';
@@ -6,6 +6,7 @@ import { PaginaCadastro } from '../modules/autenticacao/paginas/PaginaCadastro';
 import { PaginaLogin } from '../modules/autenticacao/paginas/PaginaLogin';
 import { PaginaRecuperarSenha } from '../modules/autenticacao/paginas/PaginaRecuperarSenha';
 import { PaginaVerificarEmail } from '../modules/autenticacao/paginas/PaginaVerificarEmail';
+import { PaginaNaoEncontrada } from './PaginaNaoEncontrada';
 
 function PaginaInicial() {
 	const { usuario, sair } = usarAutenticacao();
@@ -67,7 +68,8 @@ function RotasAplicativo() {
 					</RotaProtegida>
 				}
 			/>
-			<Route path="*" element={<Navigate to="/" replace />} />
+			<Route path="/404" element={<PaginaNaoEncontrada />} />
+			<Route path="*" element={<PaginaNaoEncontrada />} />
 		</Routes>
 	);
 }
