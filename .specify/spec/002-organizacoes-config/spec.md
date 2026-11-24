@@ -24,11 +24,13 @@ Permitir que o usuário **prestador** cadastre e mantenha os dados da sua organi
 - Interface fiel ao Figma (tokens do `tailwind.config.cjs`), responsiva (desktop e mobile) e com estado assíncrono via TanStack Query.
 - Código 100% em português conforme Constituição.
 
-## 4. Pontos em Aberto (validar com o time antes do plano ser executado)
-O Figma e os schemas atuais divergem nos itens abaixo. A proposta adotada no `plan.md` está indicada entre parênteses.
-1. **Telefone da empresa:** existe no Figma, mas não em `organizacoes`. *(Proposta: adicionar a coluna `telefone`.)*
-2. **Documento (CPF/CNPJ) e capacidade simultânea:** obrigatórios no schema/Constituição, mas ausentes no Figma. *(Proposta: incluir os dois campos no bloco "Sua empresa".)*
-3. **Pausa e duração padrão:** existem no Figma, mas não nos schemas. *(Proposta: novas colunas, ver `plan.md`.)*
-4. **Expediente único x por dia:** o Figma define um único horário para todos os dias; o schema guarda uma linha por dia. *(Proposta: a interface aplica o mesmo expediente e pausa a todos os dias ativos; o backend já fica preparado para horários diferentes por dia.)*
-5. **Bloqueios pontuais:** exigidos pela Constituição (Art. 5.3), mas sem tela no Figma. *(Proposta: novo bloco "Bloqueios" seguindo o padrão visual dos demais cartões.)*
-6. **"Sem sobreposição para a mesma equipe":** o Figma cita "equipe", conceito que ainda não existe no modelo de dados. *(Proposta: fora do escopo desta feature.)*
+## 4. Decisões sobre as Divergências Figma x Schema (T00 — resolvido)
+O Figma e os schemas divergiam nos itens abaixo. A validação foi delegada pelo time; as decisões tomadas foram:
+1. **Telefone da empresa:** adicionada a coluna `telefone` em `organizacoes` (nullable no banco para preservar registros antigos; obrigatório no cadastro e na edição pela API). A tela pré-preenche com o telefone do usuário.
+2. **Documento (CPF/CNPJ) e capacidade simultânea:** incluídos no bloco "Sua empresa". O documento é aceito com ou sem máscara, armazenado somente com dígitos, validado pelos dígitos verificadores e exibido como somente leitura após o cadastro.
+3. **Pausa e duração padrão:** novas colunas `inicio_pausa`/`fim_pausa` (em `configuracoes_agenda`) e `duracao_padrao_minutos` (em `organizacoes`).
+4. **Expediente único x por dia:** a interface aplica o mesmo expediente e a mesma pausa a todos os dias; a API grava uma linha por dia e já aceita horários diferentes por dia.
+5. **Bloqueios pontuais:** novo cartão "Bloqueios na agenda" no mesmo padrão visual dos demais. Cada bloqueio é criado/removido na hora, sem depender do botão "Salvar alterações".
+6. **"Sem sobreposição para a mesma equipe":** o conceito de equipe fica fora do escopo. O texto do cartão informativo passa a exibir a capacidade simultânea real da empresa.
+7. **Elementos de demonstração do Figma** ("Ambiente de exemplo" e "Exemplo: toque nos campos…") não foram implementados por serem conteúdo de protótipo.
+8. **Menu de navegação:** itens de páginas que ainda não existem (Agendamentos, Clientes, Serviços) aparecem desabilitados com a indicação "Em breve", evitando levar o usuário à página 404.
