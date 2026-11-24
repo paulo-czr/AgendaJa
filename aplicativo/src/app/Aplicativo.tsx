@@ -6,6 +6,8 @@ import { PaginaCadastro } from '../modules/autenticacao/paginas/PaginaCadastro';
 import { PaginaLogin } from '../modules/autenticacao/paginas/PaginaLogin';
 import { PaginaRecuperarSenha } from '../modules/autenticacao/paginas/PaginaRecuperarSenha';
 import { PaginaVerificarEmail } from '../modules/autenticacao/paginas/PaginaVerificarEmail';
+import { ExigirOrganizacao } from '../modules/organizacoes/componentes/ExigirOrganizacao';
+import { PaginaConfiguracoes } from '../modules/organizacoes/paginas/PaginaConfiguracoes';
 import { PaginaNaoEncontrada } from './PaginaNaoEncontrada';
 
 function PaginaInicial() {
@@ -64,7 +66,17 @@ function RotasAplicativo() {
 				path="/"
 				element={
 					<RotaProtegida>
-						<PaginaInicial />
+						<ExigirOrganizacao>
+							<PaginaInicial />
+						</ExigirOrganizacao>
+					</RotaProtegida>
+				}
+			/>
+			<Route
+				path="/configuracoes"
+				element={
+					<RotaProtegida papeis={['prestador']}>
+						<PaginaConfiguracoes />
 					</RotaProtegida>
 				}
 			/>
