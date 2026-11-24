@@ -8,6 +8,13 @@
       "when": 1795272148062,
       "tag": "0000_perpetual_zombie",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795482335188,
+      "tag": "0001_organizacoes_configuracoes",
+      "breakpoints": true
     }
   ]
 }

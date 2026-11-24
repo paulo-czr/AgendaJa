@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import guaxinimDuvida from '../assets/figuras/guaxinim-duvida-404.png';
-import { Logo } from '../componentes/Logo';
+import { Logo } from '../components/Logo';
 
 const GRID_4 = [
 	'....###..',

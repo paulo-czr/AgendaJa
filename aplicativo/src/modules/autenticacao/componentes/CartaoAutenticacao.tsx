@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { icones } from '../../../assets/icones';
-import { Logo } from '../../../componentes/Logo';
+import { Logo } from '../../../components/Logo';
 
 interface PropriedadesCartaoAutenticacao {
 	titulo: string;

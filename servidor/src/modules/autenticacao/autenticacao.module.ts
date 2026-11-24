@@ -20,6 +20,8 @@ import { AutenticacaoServico } from './autenticacao.service';
 	],
 	controllers: [AutenticacaoControlador],
 	providers: [AutenticacaoServico, GuardaAutenticacao, GuardaPapeis],
-	exports: [GuardaAutenticacao, GuardaPapeis],
+	// JwtModule é reexportado porque o GuardaAutenticacao depende do JwtService
+	// no contexto de cada módulo que o utiliza em @UseGuards.
+	exports: [GuardaAutenticacao, GuardaPapeis, JwtModule],
 })
 export class AutenticacaoModule { }

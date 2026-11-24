@@ -4,6 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { validarConfiguracao } from './config/configuracao.schema';
 import { BancoDadosModule } from './database/banco-dados.module';
 import { AutenticacaoModule } from './modules/autenticacao/autenticacao.module';
+import { ConfiguracoesAgendaModule } from './modules/configuracoes-agenda/configuracoes-agenda.module';
+import { OrganizacoesModule } from './modules/organizacoes/organizacoes.module';
 
 @Module({
 	imports: [
@@ -14,6 +16,8 @@ import { AutenticacaoModule } from './modules/autenticacao/autenticacao.module';
 		}),
 		BancoDadosModule,
 		AutenticacaoModule,
+		OrganizacoesModule,
+		ConfiguracoesAgendaModule,
 	],
 })
 export class AppModule {}
