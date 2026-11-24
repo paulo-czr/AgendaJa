@@ -35,32 +35,32 @@ interface PropriedadesCardToast {
 const CONFIGURACOES_TIPO = {
 	sucesso: {
 		Icone: CheckCircle2,
-		classeIcone: 'text-marca-600',
-		classeFundoIcone: 'bg-marca-50 border border-marca-500/20',
+		classeIcone: 'text-cor-primaria-hover',
+		classeFundoIcone: 'bg-cor-primaria-suave border border-cor-primaria/20',
 		papel: 'status',
 	},
 	erro: {
 		Icone: AlertCircle,
-		classeIcone: 'text-perigo',
-		classeFundoIcone: 'bg-perigo-fundo border border-perigo/20',
+		classeIcone: 'text-cor-perigo',
+		classeFundoIcone: 'bg-cor-perigo-fundo border border-cor-perigo/20',
 		papel: 'alert',
 	},
 	aviso: {
 		Icone: AlertTriangle,
-		classeIcone: 'text-amber-600',
-		classeFundoIcone: 'bg-amber-50 border border-amber-500/20',
+		classeIcone: 'text-cor-alerta',
+		classeFundoIcone: 'bg-cor-alerta-fundo border border-cor-alerta/20',
 		papel: 'status',
 	},
 	info: {
 		Icone: Info,
-		classeIcone: 'text-tinta',
-		classeFundoIcone: 'bg-superficie-neutra border border-borda',
+		classeIcone: 'text-cor-fonte-primaria',
+		classeFundoIcone: 'bg-cor-superficie-neutra border border-cor-borda',
 		papel: 'status',
 	},
 	carregando: {
 		Icone: Loader2,
-		classeIcone: 'text-marca-600 animate-spin',
-		classeFundoIcone: 'bg-marca-50 border border-marca-500/20',
+		classeIcone: 'text-cor-primaria animate-spin',
+		classeFundoIcone: 'bg-cor-primaria-suave border border-cor-primaria/20',
 		papel: 'status',
 	},
 } as const;
@@ -73,7 +73,7 @@ function CardToast({ t, tipo, titulo, mensagem, acao }: PropriedadesCardToast) {
 		<div
 			role={config.papel}
 			aria-live="polite"
-			className={`pointer-events-auto flex w-full max-w-sm items-start gap-3.5 rounded-2xl border border-borda/80 bg-white p-4 shadow-[0_8px_30px_rgb(14,41,57,0.12)] transition-all duration-200 [touch-action:manipulation] ${
+			className={`pointer-events-auto flex w-full max-w-sm items-start gap-3.5 rounded-2xl border border-cor-borda/80 bg-cor-superficie p-4 shadow-flutuante transition-all duration-200 [touch-action:manipulation] ${
 				t.visible
 					? 'translate-y-0 opacity-100 scale-100'
 					: '-translate-y-2 opacity-0 scale-95 pointer-events-none'
@@ -88,11 +88,13 @@ function CardToast({ t, tipo, titulo, mensagem, acao }: PropriedadesCardToast) {
 
 			<div className="min-w-0 flex-1 pt-0.5">
 				{titulo && (
-					<p className="text-[13px] font-semibold leading-5 text-tinta">{titulo}</p>
+					<p className="text-[13px] font-semibold leading-5 text-cor-fonte-primaria">
+						{titulo}
+					</p>
 				)}
 				<div
-					className={`text-xs leading-5 text-tinta-suave ${
-						titulo ? 'mt-0.5' : 'text-[13px] font-medium text-tinta'
+					className={`text-xs leading-5 text-cor-fonte-secundaria ${
+						titulo ? 'mt-0.5' : 'text-[13px] font-medium text-cor-fonte-primaria'
 					}`}
 				>
 					{mensagem}
@@ -105,7 +107,7 @@ function CardToast({ t, tipo, titulo, mensagem, acao }: PropriedadesCardToast) {
 							acao.aoClicar();
 							toast.dismiss(t.id);
 						}}
-						className="mt-2.5 inline-flex items-center text-xs font-semibold text-marca-700 underline underline-offset-2 transition-colors hover:text-marca-600 [touch-action:manipulation]"
+						className="mt-2.5 inline-flex items-center text-xs font-semibold text-cor-primaria-escura underline underline-offset-2 transition-colors hover:text-cor-primaria-hover [touch-action:manipulation]"
 					>
 						{acao.rotulo}
 					</button>
@@ -116,7 +118,7 @@ function CardToast({ t, tipo, titulo, mensagem, acao }: PropriedadesCardToast) {
 				type="button"
 				onClick={() => toast.dismiss(t.id)}
 				aria-label="Fechar notificação"
-				className="grid size-7 shrink-0 place-items-center rounded-lg text-tinta-suave/70 transition-colors hover:bg-superficie hover:text-tinta [touch-action:manipulation]"
+				className="grid size-7 shrink-0 place-items-center rounded-lg text-cor-fonte-secundaria/70 transition-colors hover:bg-cor-fundo hover:text-cor-fonte-primaria [touch-action:manipulation]"
 			>
 				<X className="size-4" strokeWidth={2} />
 			</button>

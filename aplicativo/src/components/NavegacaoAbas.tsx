@@ -34,7 +34,7 @@ interface PosicaoIndicador {
 /**
  * Componente reutilizável de navegação por abas com indicador ativo deslizante
  * fluido (animação CSS de alta performance), suporte a variantes (pílula / linha),
- * navegação completa por teclado (WAI-ARIA tabs) e rolagem horizontal suave no mobile.
+ * navegação completa por teclado (WAI-ARIA tabs) e cores semânticas padronizadas.
  */
 export function NavegacaoAbas<Id extends string = string>({
 	itens,
@@ -119,8 +119,8 @@ export function NavegacaoAbas<Id extends string = string>({
 			aria-label={ariaLabel}
 			className={`relative flex items-center overflow-x-auto no-scrollbar [touch-action:pan-x] ${
 				ehLinha
-					? 'border-b border-borda'
-					: 'rounded-xl border border-borda/80 bg-superficie-neutra/80 p-1'
+					? 'border-b border-cor-borda'
+					: 'rounded-xl border border-cor-borda/80 bg-cor-superficie-neutra/80 p-1'
 			} ${className}`}
 		>
 			{/* Indicador deslizante animado */}
@@ -133,8 +133,8 @@ export function NavegacaoAbas<Id extends string = string>({
 					}}
 					className={`absolute pointer-events-none transition-[transform,width] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] ${
 						ehLinha
-							? 'bottom-0 left-0 h-0.5 bg-marca-500'
-							: 'bottom-1 left-0 top-1 rounded-[9px] border border-borda/60 bg-white shadow-[0_1px_2px_rgba(14,41,57,0.06)]'
+							? 'bottom-0 left-0 h-0.5 bg-cor-primaria'
+							: 'bottom-1 left-0 top-1 rounded-[9px] border border-cor-borda/60 bg-cor-superficie shadow-sutil'
 					}`}
 				/>
 			)}
@@ -165,14 +165,14 @@ export function NavegacaoAbas<Id extends string = string>({
 							ehLinha ? 'pb-3' : ''
 						} ${
 							ativo
-								? 'font-semibold text-tinta'
-								: 'text-tinta-suave hover:text-tinta focus-visible:text-tinta'
+								? 'font-semibold text-cor-fonte-primaria'
+								: 'text-cor-fonte-secundaria hover:text-cor-fonte-primaria focus-visible:text-cor-fonte-primaria'
 						}`}
 					>
 						{item.icone && (
 							<span
 								aria-hidden="true"
-								className={`transition-colors ${ativo ? 'text-marca-700' : 'text-tinta-suave/80'}`}
+								className={`transition-colors ${ativo ? 'text-cor-primaria-escura' : 'text-cor-fonte-secundaria/80'}`}
 							>
 								{item.icone}
 							</span>
