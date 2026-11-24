@@ -5,6 +5,7 @@ import {
 	integer,
 	boolean,
 	timestamp,
+	uniqueIndex,
 } from 'drizzle-orm/pg-core';
 import type { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 import { organizacoes } from './organizacoes.schema';
@@ -20,6 +21,9 @@ export const configuracoesAgenda = pgTable('configuracoes_agenda', {
 	diaSemana: integer('dia_semana').notNull(), // 0 = Domingo a 6 = Sábado
 	horarioAbertura: varchar('horario_abertura', { length: 5 }).notNull(), // Formato "HH:MM"
 	horarioFechamento: varchar('horario_fechamento', { length: 5 }).notNull(), // Formato "HH:MM"
+	// Intervalo opcional (ex.: almoço) que não fica disponível para reservas.
+	inicioPausa: varchar('inicio_pausa', { length: 5 }), // Formato "HH:MM"
+	fimPausa: varchar('fim_pausa', { length: 5 }), // Formato "HH:MM"
 	ativo: boolean('ativo').default(true).notNull(),
 	criadoEm: timestamp('criado_em', { withTimezone: true })
 		.defaultNow()
@@ -27,7 +31,14 @@ export const configuracoesAgenda = pgTable('configuracoes_agenda', {
 	atualizadoEm: timestamp('atualizado_em', { withTimezone: true })
 		.defaultNow()
 		.notNull(),
-});
+},
+(tabela) => [
+	// Uma única linha por dia da semana em cada organização.
+	uniqueIndex('configuracoes_agenda_organizacao_dia_unico').on(
+		tabela.idOrganizacao,
+		tabela.diaSemana,
+	),
+]);
 
 /**
  * Bloqueios pontuais de datas e horários (ex.: feriados, férias, manutenções) que sobrepõem a grade semanal.
