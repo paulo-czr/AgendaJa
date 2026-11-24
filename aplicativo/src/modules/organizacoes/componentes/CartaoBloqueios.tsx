@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { icones } from '../../../assets/icones';
+import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { usarConfiguracoesAgenda } from '../hooks/usarConfiguracoesAgenda';
 import { CampoConfiguracao, CartaoConfiguracao } from './CartaoConfiguracao';
@@ -17,7 +18,12 @@ function descreverPeriodo(inicio: string, fim: string): string {
 }
 
 const ID_FORMULARIO_BLOQUEIO = 'formulario-bloqueio';
-const SUGESTOES_MOTIVO = ['Feriado', 'Férias', 'Manutenção', 'Treinamento'] as const;
+const SUGESTOES_MOTIVO = [
+	'Feriado',
+	'Férias',
+	'Manutenção',
+	'Treinamento',
+] as const;
 
 type RetornoConfiguracoesAgenda = ReturnType<typeof usarConfiguracoesAgenda>;
 
@@ -52,7 +58,9 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 		definirErro(null);
 
 		if (!inicio || !fim) {
-			definirErro('Informe a data e horário de início e fim do bloqueio.');
+			const mensagem = 'Informe a data e horário de início e fim do bloqueio.';
+			definirErro(mensagem);
+			notificar.erro(mensagem);
 			return;
 		}
 
@@ -60,7 +68,9 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 		const dataHoraFim = new Date(fim);
 
 		if (dataHoraFim <= dataHoraInicio) {
-			definirErro('O fim do bloqueio deve ser posterior ao início.');
+			const mensagem = 'O fim do bloqueio deve ser posterior ao início.';
+			definirErro(mensagem);
+			notificar.erro(mensagem);
 			return;
 		}
 
@@ -75,8 +85,13 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 					definirInicio('');
 					definirFim('');
 					definirMotivo('');
+					notificar.sucesso('Bloqueio adicionado à agenda.');
 				},
-				onError: (falha) => definirErro(obterMensagemErro(falha)),
+				onError: (falha) => {
+					const mensagem = obterMensagemErro(falha);
+					definirErro(mensagem);
+					notificar.erro(mensagem);
+				},
 			},
 		);
 	}
@@ -84,10 +99,15 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 	function confirmarRemocao(id: number): void {
 		definirErro(null);
 		removerBloqueio.mutate(id, {
-			onSuccess: () => definirIdConfirmandoRemocao(null),
+			onSuccess: () => {
+				definirIdConfirmandoRemocao(null);
+				notificar.sucesso('Bloqueio removido da agenda.');
+			},
 			onError: (falha) => {
 				definirIdConfirmandoRemocao(null);
-				definirErro(obterMensagemErro(falha));
+				const mensagem = obterMensagemErro(falha);
+				definirErro(mensagem);
+				notificar.erro(mensagem);
 			},
 		});
 	}
@@ -181,19 +201,12 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 			</div>
 
 			{createPortal(
-				<form
-					id={ID_FORMULARIO_BLOQUEIO}
-					onSubmit={adicionar}
-					noValidate
-					hidden
-				/>,
+				<form id={ID_FORMULARIO_BLOQUEIO} onSubmit={adicionar} noValidate hidden />,
 				document.body,
 			)}
 
 			<div className="mt-6 border-t border-borda pt-6">
-				<p className="text-xs font-semibold text-tinta">
-					Programar novo bloqueio
-				</p>
+				<p className="text-xs font-semibold text-tinta">Programar novo bloqueio</p>
 				<div className="mt-3 grid gap-4 sm:grid-cols-2 sm:gap-6">
 					<CampoConfiguracao
 						id="bloqueio-inicio"

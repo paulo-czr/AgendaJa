@@ -115,6 +115,79 @@ export function CartaoDadosEmpresa({
 	);
 }
 
+/**
+ * Prévia de identidade pública da empresa exibida ao lado dos dados cadastrais
+ * para balancear o layout da aba de empresa e dar contexto de como o cliente enxerga.
+ */
+export function CartaoIdentidadePublica({
+	formulario,
+}: {
+	formulario: FormularioConfiguracoes;
+}) {
+	const nome = formulario.nomeFantasia.trim() || 'Sua Empresa';
+	const documento = formulario.documento.trim() || 'Documento pendente';
+	const telefone = formulario.telefone.trim() || 'Telefone não informado';
+	const endereco = formulario.endereco.trim() || 'Endereço não informado';
+
+	return (
+		<section
+			aria-label="Prévia da empresa para os clientes"
+			className="rounded-2xl border border-borda/80 bg-white p-5 shadow-[0_1px_2px_rgba(14,41,57,0.04)] sm:p-6"
+		>
+			<div className="flex items-center justify-between gap-3">
+				<span className="inline-flex items-center gap-2 text-xs font-medium text-marca-700">
+					<span
+						aria-hidden="true"
+						className="size-2 rounded-full bg-marca-500"
+					/>
+					Visualização do cliente
+				</span>
+				<span className="rounded-md bg-marca-50 px-2.5 py-1 text-[11px] font-semibold text-marca-700">
+					Comprovantes e avisos
+				</span>
+			</div>
+
+			<h2 className="mt-3 text-lg font-semibold text-tinta">
+				Identidade nos agendamentos
+			</h2>
+			<p className="mt-1 text-xs leading-5 text-tinta-suave">
+				Como seus clientes visualizam a empresa no WhatsApp e no resumo do agendamento.
+			</p>
+
+			<div className="mt-6 rounded-xl border border-borda/80 bg-superficie p-5">
+				<div className="flex items-center gap-3">
+					<div className="grid size-11 shrink-0 place-items-center rounded-xl bg-petroleo font-bold text-white shadow-sm">
+						{nome.charAt(0).toUpperCase()}
+					</div>
+					<div className="min-w-0 flex-1">
+						<p className="truncate text-base font-bold text-tinta">{nome}</p>
+						<p className="truncate text-xs tabular-nums text-tinta-suave">
+							{documento}
+						</p>
+					</div>
+				</div>
+
+				<div className="mt-5 space-y-2.5 border-t border-borda/70 pt-4 text-xs">
+					<div className="flex items-center justify-between gap-2">
+						<span className="text-tinta-suave">Contato</span>
+						<span className="font-medium tabular-nums text-tinta">{telefone}</span>
+					</div>
+					<div className="flex items-start justify-between gap-4">
+						<span className="shrink-0 text-tinta-suave">Endereço</span>
+						<span className="truncate text-right font-medium text-tinta">
+							{endereco}
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<p className="mt-5 text-xs leading-5 text-tinta-suave">
+				Manter o telefone e o endereço atualizados garante que os lembretes automáticos orientem o cliente corretamente.
+			</p>
+		</section>
+	);
+}
+
 export function CartaoFuncionamento({
 	formulario,
 	alterar,
