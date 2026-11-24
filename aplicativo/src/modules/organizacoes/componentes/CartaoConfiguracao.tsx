@@ -11,6 +11,7 @@ interface PropriedadesCartaoConfiguracao {
 /**
  * Cartão branco das Configurações: raio de 16px (rounded-2xl), borda sutil,
  * padding de 24px na grade de 4px e cabeçalho com opção de ação contextual.
+ * Estilizado com as variáveis de identidade visual hierárquicas.
  */
 export function CartaoConfiguracao({
 	titulo,
@@ -21,14 +22,14 @@ export function CartaoConfiguracao({
 }: PropriedadesCartaoConfiguracao) {
 	return (
 		<section
-			className={`rounded-2xl border border-borda/80 bg-white p-5 shadow-[0_1px_2px_rgba(14,41,57,0.04)] sm:p-6 ${className}`}
+			className={`rounded-2xl border border-cor-borda/80 bg-cor-superficie p-5 shadow-sutil sm:p-6 ${className}`}
 		>
 			<div className="flex flex-wrap items-start justify-between gap-3">
 				<div>
-					<h2 className="text-lg font-semibold leading-6 text-tinta text-balance">
+					<h2 className="text-lg font-semibold leading-6 text-cor-fonte-primaria text-balance">
 						{titulo}
 					</h2>
-					<p className="mt-1 text-xs leading-5 text-tinta-suave">{descricao}</p>
+					<p className="mt-1 text-xs leading-5 text-cor-fonte-secundaria">{descricao}</p>
 				</div>
 				{acaoCabecalho}
 			</div>
@@ -49,7 +50,7 @@ interface PropriedadesCampoConfiguracao
 /**
  * Campo padronizado na grade de 4px:
  * - Altura de 44px (h-11) e raio de 8px (rounded-lg, aninhado ao cartão de 16px)
- * - Foco acessível via :focus-visible
+ * - Foco acessível via :focus-visible com cor-primaria
  * - Vínculo semântico aria-invalid e aria-describedby para erro e ajuda
  */
 export function CampoConfiguracao({
@@ -70,7 +71,7 @@ export function CampoConfiguracao({
 	return (
 		<div className={className}>
 			<div className="flex items-center justify-between gap-2">
-				<label htmlFor={id} className="block text-xs font-medium text-tinta">
+				<label htmlFor={id} className="block text-xs font-medium text-cor-fonte-primaria">
 					{rotulo}
 				</label>
 				{complementoRotulo}
@@ -80,12 +81,12 @@ export function CampoConfiguracao({
 				name={name ?? id}
 				aria-invalid={erro ? true : undefined}
 				aria-describedby={descricoes}
-				className={`mt-2 h-11 w-full rounded-lg border px-3.5 text-[13px] text-tinta transition-colors placeholder:text-tinta-suave read-only:cursor-default read-only:bg-superficie-neutra/70 read-only:text-tinta-suave focus-visible:bg-white focus-visible:outline-none focus-visible:ring-2 read-only:focus-visible:border-borda read-only:focus-visible:bg-superficie-neutra/70 read-only:focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-60 ${
+				className={`mt-2 h-11 w-full rounded-lg border px-3.5 text-[13px] text-cor-fonte-primaria transition-colors placeholder:text-cor-fonte-secundaria read-only:cursor-default read-only:bg-cor-superficie-neutra/70 read-only:text-cor-fonte-secundaria focus-visible:bg-cor-superficie focus-visible:outline-none focus-visible:ring-2 read-only:focus-visible:border-cor-borda read-only:focus-visible:bg-cor-superficie-neutra/70 read-only:focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-60 ${
 					tabular ? 'tabular-nums' : ''
 				} ${
 					erro
-						? 'border-perigo bg-perigo-fundo/40 focus-visible:border-perigo focus-visible:ring-perigo/25'
-						: 'border-borda bg-superficie focus-visible:border-marca-500 focus-visible:ring-marca-500/25'
+						? 'border-cor-perigo bg-cor-perigo-fundo/40 focus-visible:border-cor-perigo focus-visible:ring-cor-perigo/25'
+						: 'border-cor-borda bg-cor-fundo focus-visible:border-cor-primaria focus-visible:ring-cor-primaria/25'
 				}`}
 				{...propriedades}
 			/>
@@ -93,13 +94,13 @@ export function CampoConfiguracao({
 				<p
 					id={idErro}
 					role="alert"
-					className="mt-1.5 text-[11px] font-medium leading-4 text-perigo"
+					className="mt-1.5 text-[11px] font-medium leading-4 text-cor-perigo"
 				>
 					{erro}
 				</p>
 			) : (
 				ajuda && (
-					<p id={idAjuda} className="mt-1.5 text-[11px] leading-4 text-tinta-suave">
+					<p id={idAjuda} className="mt-1.5 text-[11px] leading-4 text-cor-fonte-secundaria">
 						{ajuda}
 					</p>
 				)

@@ -1,5 +1,6 @@
 import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { LayoutPainel } from '../components/LayoutPainel';
+import { ProvedorNotificacoes } from '../lib/notificacoes';
 import { ProvedorAplicativo } from './ProvedorAplicativo';
 import { RotaProtegida } from '../modules/autenticacao/componentes/RotaProtegida';
 import { usarAutenticacao } from '../modules/autenticacao/hooks/usarAutenticacao';
@@ -140,6 +141,7 @@ export function Aplicativo() {
 		<ProvedorAplicativo>
 			<BrowserRouter>
 				<RotasAplicativo />
+				<ProvedorNotificacoes />
 			</BrowserRouter>
 		</ProvedorAplicativo>
 	);

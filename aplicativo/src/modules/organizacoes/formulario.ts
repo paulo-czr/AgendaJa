@@ -406,3 +406,20 @@ export function calcularResumoExpediente(
 		rotuloDias,
 	};
 }
+
+export type AbaConfiguracoes = 'empresa' | 'atendimento' | 'bloqueios';
+
+/** Determina qual aba da tela de configurações contém determinado campo. */
+export function obterAbaDoCampo(
+	campo: keyof FormularioConfiguracoes,
+): 'empresa' | 'atendimento' {
+	if (
+		campo === 'nomeFantasia' ||
+		campo === 'documento' ||
+		campo === 'telefone' ||
+		campo === 'endereco'
+	) {
+		return 'empresa';
+	}
+	return 'atendimento';
+}

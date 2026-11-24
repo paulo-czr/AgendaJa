@@ -1,9 +1,7 @@
+import { CORES_HEX } from '../app/cores';
+
 export type NomeIconeMenu =
-	| 'inicio'
-	| 'agendamentos'
-	| 'clientes'
-	| 'servicos'
-	| 'configuracoes';
+	'inicio' | 'agendamentos' | 'clientes' | 'servicos' | 'configuracoes';
 
 interface PropriedadesIconeMenu {
 	nome: NomeIconeMenu;
@@ -12,13 +10,17 @@ interface PropriedadesIconeMenu {
 	className?: string;
 }
 
-const COR_DESTAQUE = '#20C9AE';
+const COR_DESTAQUE = CORES_HEX.primaria;
 
 /**
  * Ícones do menu lateral exportados do Figma (20px). Ficam em SVG inline para
  * herdar a cor do texto (`currentColor`) e trocar de cor no item ativo.
  */
-export function IconeMenu({ nome, ativo = false, className = '' }: PropriedadesIconeMenu) {
+export function IconeMenu({
+	nome,
+	ativo = false,
+	className = '',
+}: PropriedadesIconeMenu) {
 	const destaque = ativo ? 'currentColor' : COR_DESTAQUE;
 	const comum = {
 		className: `w-[18px] shrink-0 ${className}`,
@@ -46,7 +48,12 @@ export function IconeMenu({ nome, ativo = false, className = '' }: PropriedadesI
 						clipRule="evenodd"
 						fill="currentColor"
 					/>
-					<path d="M5 1.5V4.5M13 1.5V4.5" strokeWidth="3" strokeLinecap="round" stroke="currentColor" />
+					<path
+						d="M5 1.5V4.5M13 1.5V4.5"
+						strokeWidth="3"
+						strokeLinecap="round"
+						stroke="currentColor"
+					/>
 					<path
 						d="M5.5 12L8 14.5L12.5 10"
 						strokeWidth="2.3"
@@ -85,7 +92,14 @@ export function IconeMenu({ nome, ativo = false, className = '' }: PropriedadesI
 						fill="currentColor"
 					/>
 					<path d="M0.9 8.78H17.1" strokeWidth="0.9" stroke={destaque} />
-					<rect x="7.2" y="7.43" width="3.6" height="3.6" rx="0.63" fill={destaque} />
+					<rect
+						x="7.2"
+						y="7.43"
+						width="3.6"
+						height="3.6"
+						rx="0.63"
+						fill={destaque}
+					/>
 				</svg>
 			);
 		case 'configuracoes':
@@ -97,9 +111,30 @@ export function IconeMenu({ nome, ativo = false, className = '' }: PropriedadesI
 						strokeLinecap="round"
 						stroke="currentColor"
 					/>
-					<rect x="0" y="3.79" width="4.74" height="5.68" rx="0.95" fill="currentColor" />
-					<rect x="6.63" y="10.42" width="4.74" height="5.68" rx="0.95" fill={destaque} />
-					<rect x="13.26" y="2.84" width="4.74" height="5.68" rx="0.95" fill="currentColor" />
+					<rect
+						x="0"
+						y="3.79"
+						width="4.74"
+						height="5.68"
+						rx="0.95"
+						fill="currentColor"
+					/>
+					<rect
+						x="6.63"
+						y="10.42"
+						width="4.74"
+						height="5.68"
+						rx="0.95"
+						fill={destaque}
+					/>
+					<rect
+						x="13.26"
+						y="2.84"
+						width="4.74"
+						height="5.68"
+						rx="0.95"
+						fill="currentColor"
+					/>
 				</svg>
 			);
 	}

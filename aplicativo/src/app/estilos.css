@@ -3,18 +3,63 @@
 @tailwind utilities;
 
 :root {
-	font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-	color: #123449;
-	background: #f4f8f8;
+	font-family:
+		Inter,
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		sans-serif;
+	color: rgb(var(--cor-fonte-primaria));
+	background: rgb(var(--cor-fundo));
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
+
+	/* IDENTIDADE VISUAL - CONSTANTES FIXAS GLOBAIS DE COR */
+
+	/* Ação e Destaques (Primária) */
+	--cor-primaria: 32 201 174; /* #20c9ae - Verde-água da marca */
+	--cor-primaria-hover: 27 181 156; /* #1bb59c - Hover de botões primários */
+	--cor-primaria-suave: 223 248 242; /* #dff8f2 - Fundos suaves, tags e seleção ativa */
+	--cor-primaria-escura: 8 125 112; /* #087d70 - Textos destacados sobre fundo claro */
+
+	/* Estrutural (Secundária) */
+	--cor-secundaria: 14 41 57; /* #0e2939 - Azul-petróleo (menu, cabeçalho) */
+	--cor-secundaria-suave: 23 55 71; /* #173747 - Superfícies sobre o azul-petróleo */
+	--cor-secundaria-borda: 41 71 86; /* #294756 - Divisórias sobre o azul-petróleo */
+
+	/* Tipografia (Fontes) */
+	--cor-fonte-primaria: 18 52 73; /* #123449 - Títulos e textos de alto contraste */
+	--cor-fonte-secundaria: 101 125 138; /* #657d8a - Descrições, legendas e subtítulos */
+	--cor-fonte-invertida: 255 255 255; /* #ffffff - Textos sobre fundo escuro */
+	--cor-fonte-invertida-suave: 181 202 212; /* #b5cad4 - Subtítulos sobre fundo escuro */
+	--cor-fonte-invertida-media: 170 192 203; /* #aac0cb - Detalhes sobre fundo escuro */
+	--cor-fonte-invertida-mutada: 140 169 181; /* #8ca9b5 - Rótulos sobre fundo escuro */
+
+	/* Superfícies e Fundos */
+	--cor-fundo: 244 248 248; /* #f4f8f8 - Fundo geral da aplicação */
+	--cor-superficie: 255 255 255; /* #ffffff - Cartões e painéis brancos */
+	--cor-superficie-neutra: 237 242 244; /* #edf2f4 - Tags neutras e inputs secundários */
+	--cor-borda: 228 236 238; /* #e4ecee - Bordas e divisórias */
+
+	/* Feedback e Semântica */
+	--cor-perigo: 179 66 83; /* #b34253 - Erros e cancelamentos */
+	--cor-perigo-fundo: 253 236 238; /* #fdecee - Fundo suave de alertas de erro */
+	--cor-sucesso: 22 163 74; /* #16a34a - Confirmações e status positivo */
+	--cor-sucesso-fundo: 220 252 231; /* #dcfce7 - Fundo suave de sucesso */
+	--cor-alerta: 217 119 6; /* #d97706 - Avisos e atenção */
+	--cor-alerta-fundo: 254 243 199; /* #fef3c7 - Fundo suave de aviso */
+
+	/* Sombras */
+	--cor-sombra: 14 41 57;
 }
 
 body {
 	min-width: 320px;
 	min-height: 100vh;
 	margin: 0;
+	color: rgb(var(--cor-fonte-primaria));
+	background: rgb(var(--cor-fundo));
 }
 
 button,
@@ -25,6 +70,35 @@ input {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible {
-	outline: 3px solid #20c9ae;
+	outline: 3px solid rgb(var(--cor-primaria));
 	outline-offset: 3px;
+}
+
+@keyframes painelEntrada {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animar-painel-aba {
+	animation: painelEntrada 200ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animar-painel-aba {
+		animation: none;
+	}
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+.no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
 }
