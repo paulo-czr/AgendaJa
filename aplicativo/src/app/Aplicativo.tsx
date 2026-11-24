@@ -1,4 +1,5 @@
 import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { LayoutPainel } from '../components/LayoutPainel';
 import { ProvedorAplicativo } from './ProvedorAplicativo';
 import { RotaProtegida } from '../modules/autenticacao/componentes/RotaProtegida';
 import { usarAutenticacao } from '../modules/autenticacao/hooks/usarAutenticacao';
@@ -7,17 +8,65 @@ import { PaginaLogin } from '../modules/autenticacao/paginas/PaginaLogin';
 import { PaginaRecuperarSenha } from '../modules/autenticacao/paginas/PaginaRecuperarSenha';
 import { PaginaVerificarEmail } from '../modules/autenticacao/paginas/PaginaVerificarEmail';
 import { ExigirOrganizacao } from '../modules/organizacoes/componentes/ExigirOrganizacao';
+import { usarOrganizacao } from '../modules/organizacoes/hooks/usarOrganizacao';
 import { PaginaConfiguracoes } from '../modules/organizacoes/paginas/PaginaConfiguracoes';
 import { PaginaNaoEncontrada } from './PaginaNaoEncontrada';
 
 function PaginaInicial() {
 	const { usuario, sair } = usarAutenticacao();
+	const ehPrestador = usuario?.role === 'prestador';
+	const { organizacao } = usarOrganizacao(ehPrestador);
 	const navegar = useNavigate();
 
 	function encerrarSessao(): void {
 		sair.mutate(undefined, {
 			onSuccess: () => navegar('/entrar', { replace: true }),
 		});
+	}
+
+	if (ehPrestador) {
+		return (
+			<LayoutPainel
+				itemAtivo="inicio"
+				titulo={`Olá, ${usuario?.nome}.`}
+				descricao="Acompanhe e gerencie o funcionamento da sua empresa no AgendaJá."
+				empresa={{
+					nome: organizacao?.nomeFantasia ?? 'Sua empresa',
+					detalhe:
+						organizacao?.endereco ||
+						(organizacao ? 'Endereço não informado' : 'Cadastro pendente'),
+				}}
+				aoSair={encerrarSessao}
+				saindo={sair.isPending}
+			>
+				<section className="rounded-[14px] bg-white p-6">
+					<p className="text-xs font-semibold uppercase tracking-wide text-marca-700">
+						Sessão ativa
+					</p>
+					<h2 className="mt-2 text-lg font-bold text-tinta">
+						{organizacao?.nomeFantasia ?? 'Configure sua empresa'}
+					</h2>
+					<p className="mt-2 max-w-xl text-[13px] leading-6 text-tinta-suave">
+						{organizacao
+							? 'Os dados da sua empresa e as regras de funcionamento da sua agenda podem ser ajustados a qualquer momento em Configurações.'
+							: 'Cadastre os dados da sua empresa e os horários de atendimento para liberar sua agenda.'}
+					</p>
+					<div className="mt-5">
+						<Link
+							to="/configuracoes"
+							className="inline-flex h-11 items-center rounded-lg bg-marca-500 px-5 text-xs font-semibold text-petroleo transition hover:bg-marca-600"
+						>
+							Ir para Configurações
+						</Link>
+					</div>
+					{sair.isError && (
+						<p className="mt-5 text-xs text-perigo" role="alert">
+							Não foi possível encerrar sua sessão. Tente novamente.
+						</p>
+					)}
+				</section>
+			</LayoutPainel>
+		);
 	}
 
 	return (
