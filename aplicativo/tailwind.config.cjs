@@ -1,52 +1,91 @@
 /**
- * Identidade visual do AgendaJá — valores extraídos do Figma
- * (arquivo "Interfaces ADS 2026", página "agendamento geral").
+ * Identidade visual do AgendaJá — Cores hierárquicas mapeadas para variáveis CSS.
+ * Permite sintaxe com opacidade Tailwind: ex. `bg-cor-primaria/50`, `text-cor-fonte-primaria/80`.
  */
 module.exports = {
 	content: ['./index.html', './src/**/*.{ts,tsx}'],
 	theme: {
 		extend: {
 			colors: {
-				// Verde-água da marca (botões, destaques, "Já" do logo)
+				// Hierarquia Semântica Baseada em Variáveis Fixas Globais
+				'cor-primaria': {
+					DEFAULT: 'rgb(var(--cor-primaria) / <alpha-value>)',
+					hover: 'rgb(var(--cor-primaria-hover) / <alpha-value>)',
+					suave: 'rgb(var(--cor-primaria-suave) / <alpha-value>)',
+					escura: 'rgb(var(--cor-primaria-escura) / <alpha-value>)',
+				},
+				'cor-secundaria': {
+					DEFAULT: 'rgb(var(--cor-secundaria) / <alpha-value>)',
+					suave: 'rgb(var(--cor-secundaria-suave) / <alpha-value>)',
+					borda: 'rgb(var(--cor-secundaria-borda) / <alpha-value>)',
+				},
+				'cor-fonte': {
+					primaria: 'rgb(var(--cor-fonte-primaria) / <alpha-value>)',
+					secundaria: 'rgb(var(--cor-fonte-secundaria) / <alpha-value>)',
+					invertida: 'rgb(var(--cor-fonte-invertida) / <alpha-value>)',
+					'invertida-suave': 'rgb(var(--cor-fonte-invertida-suave) / <alpha-value>)',
+					'invertida-media': 'rgb(var(--cor-fonte-invertida-media) / <alpha-value>)',
+					'invertida-mutada': 'rgb(var(--cor-fonte-invertida-mutada) / <alpha-value>)',
+				},
+				'cor-fundo': 'rgb(var(--cor-fundo) / <alpha-value>)',
+				'cor-superficie': {
+					DEFAULT: 'rgb(var(--cor-superficie) / <alpha-value>)',
+					neutra: 'rgb(var(--cor-superficie-neutra) / <alpha-value>)',
+				},
+				'cor-borda': 'rgb(var(--cor-borda) / <alpha-value>)',
+				'cor-perigo': {
+					DEFAULT: 'rgb(var(--cor-perigo) / <alpha-value>)',
+					fundo: 'rgb(var(--cor-perigo-fundo) / <alpha-value>)',
+				},
+				'cor-sucesso': {
+					DEFAULT: 'rgb(var(--cor-sucesso) / <alpha-value>)',
+					fundo: 'rgb(var(--cor-sucesso-fundo) / <alpha-value>)',
+				},
+				'cor-alerta': {
+					DEFAULT: 'rgb(var(--cor-alerta) / <alpha-value>)',
+					fundo: 'rgb(var(--cor-alerta-fundo) / <alpha-value>)',
+				},
+
+				// Aliases para compatibilidade total com código existente
 				marca: {
-					50: '#dff8f2', // fundos suaves: status confirmado, selos, horários
-					500: '#20c9ae', // cor principal: botões, menu ativo, acentos
-					600: '#1bb59c', // hover dos botões (variação mais escura do 500)
-					700: '#087d70', // texto de destaque, links, rótulos em caixa alta
+					50: 'rgb(var(--cor-primaria-suave) / <alpha-value>)',
+					500: 'rgb(var(--cor-primaria) / <alpha-value>)',
+					600: 'rgb(var(--cor-primaria-hover) / <alpha-value>)',
+					700: 'rgb(var(--cor-primaria-escura) / <alpha-value>)',
 				},
-				// Azul-petróleo (menu lateral, cartão de boas-vindas, texto dos botões)
 				petroleo: {
-					DEFAULT: '#0e2939',
-					800: '#173747', // cartão sobre o fundo escuro
-					700: '#294756', // divisórias sobre o fundo escuro
+					DEFAULT: 'rgb(var(--cor-secundaria) / <alpha-value>)',
+					800: 'rgb(var(--cor-secundaria-suave) / <alpha-value>)',
+					700: 'rgb(var(--cor-secundaria-borda) / <alpha-value>)',
 				},
-				// Textos sobre fundo claro
 				tinta: {
-					DEFAULT: '#123449', // títulos e texto principal
-					suave: '#657d8a', // descrições, legendas, cabeçalhos de tabela
+					DEFAULT: 'rgb(var(--cor-fonte-primaria) / <alpha-value>)',
+					suave: 'rgb(var(--cor-fonte-secundaria) / <alpha-value>)',
 				},
-				// Textos sobre fundo escuro (menu lateral e boas-vindas)
 				nevoa: {
-					DEFAULT: '#d1e0e5', // itens do menu
-					clara: '#b5cad4', // data no cartão de boas-vindas
-					media: '#aac0cb', // subtítulo da empresa
-					escura: '#8ca9b5', // rótulos em caixa alta
+					DEFAULT: 'rgb(var(--cor-fonte-invertida) / <alpha-value>)',
+					clara: 'rgb(var(--cor-fonte-invertida-suave) / <alpha-value>)',
+					media: 'rgb(var(--cor-fonte-invertida-media) / <alpha-value>)',
+					escura: 'rgb(var(--cor-fonte-invertida-mutada) / <alpha-value>)',
 				},
 				superficie: {
-					DEFAULT: '#f4f8f8', // fundo da página e dos campos
-					neutra: '#edf2f4', // status concluído
+					DEFAULT: 'rgb(var(--cor-fundo) / <alpha-value>)',
+					neutra: 'rgb(var(--cor-superficie-neutra) / <alpha-value>)',
 				},
-				borda: '#e4ecee',
+				borda: 'rgb(var(--cor-borda) / <alpha-value>)',
 				perigo: {
-					DEFAULT: '#b34253', // status cancelado, erros
-					fundo: '#fdecee',
+					DEFAULT: 'rgb(var(--cor-perigo) / <alpha-value>)',
+					fundo: 'rgb(var(--cor-perigo-fundo) / <alpha-value>)',
 				},
 			},
 			fontFamily: {
 				sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
 			},
 			boxShadow: {
-				painel: '0 24px 70px -35px rgba(14, 41, 57, 0.35)',
+				painel: '0 24px 70px -35px rgb(var(--cor-sombra) / 0.35)',
+				sutil: '0 1px 2px rgb(var(--cor-sombra) / 0.04)',
+				card: '0 1px 3px rgb(var(--cor-sombra) / 0.08)',
+				flutuante: '0 8px 30px rgb(var(--cor-sombra) / 0.12)',
 			},
 		},
 	},
