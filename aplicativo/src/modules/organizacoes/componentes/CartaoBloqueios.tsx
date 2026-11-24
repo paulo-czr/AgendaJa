@@ -17,42 +17,50 @@ function descreverPeriodo(inicio: string, fim: string): string {
 }
 
 const ID_FORMULARIO_BLOQUEIO = 'formulario-bloqueio';
+const SUGESTOES_MOTIVO = ['Feriado', 'Férias', 'Manutenção', 'Treinamento'] as const;
+
+type RetornoConfiguracoesAgenda = ReturnType<typeof usarConfiguracoesAgenda>;
+
+interface PropriedadesCartaoBloqueios {
+	agenda?: Pick<
+		RetornoConfiguracoesAgenda,
+		'bloqueios' | 'carregandoBloqueios' | 'criarBloqueio' | 'removerBloqueio'
+	>;
+}
 
 /**
- * Bloqueios pontuais (feriados, férias, manutenções). Sem tela no Figma:
- * segue o mesmo padrão visual dos demais cartões. Cada ação é salva na hora.
- *
- * O cartão fica dentro do formulário principal da página; como HTML não
- * permite formulários aninhados, os campos usam o atributo `form` para
- * apontar para um <form> próprio renderizado fora dele (via portal). Assim,
- * o Enter nos campos de bloqueio não aciona o "Salvar alterações".
+ * Bloqueios pontuais (feriados, férias, manutenções).
+ * Inclui confirmação em duas etapas para evitar exclusão destrutiva acidental
+ * e chips rápidos para preenchimento de motivos frequentes.
  */
-export function CartaoBloqueios() {
+export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
+	const agendaInterna = usarConfiguracoesAgenda(!agenda);
 	const { bloqueios, carregandoBloqueios, criarBloqueio, removerBloqueio } =
-		usarConfiguracoesAgenda(true);
+		agenda ?? agendaInterna;
+
 	const [inicio, definirInicio] = useState('');
 	const [fim, definirFim] = useState('');
 	const [motivo, definirMotivo] = useState('');
 	const [erro, definirErro] = useState<string | null>(null);
+	const [idConfirmandoRemocao, definirIdConfirmandoRemocao] = useState<
+		number | null
+	>(null);
 
 	function adicionar(evento: FormEvent<HTMLFormElement>): void {
 		evento.preventDefault();
-		// Eventos de portal sobem pela árvore do React: sem isto, o submit
-		// chegaria também ao formulário principal e salvaria as configurações.
 		evento.stopPropagation();
 		definirErro(null);
 
 		if (!inicio || !fim) {
-			definirErro('Informe o início e o fim do bloqueio.');
+			definirErro('Informe a data e horário de início e fim do bloqueio.');
 			return;
 		}
 
-		// `datetime-local` vem sem fuso; o Date converte a partir do horário local.
 		const dataHoraInicio = new Date(inicio);
 		const dataHoraFim = new Date(fim);
 
 		if (dataHoraFim <= dataHoraInicio) {
-			definirErro('O fim do bloqueio deve ser depois do início.');
+			definirErro('O fim do bloqueio deve ser posterior ao início.');
 			return;
 		}
 
@@ -73,65 +81,131 @@ export function CartaoBloqueios() {
 		);
 	}
 
+	function confirmarRemocao(id: number): void {
+		definirErro(null);
+		removerBloqueio.mutate(id, {
+			onSuccess: () => definirIdConfirmandoRemocao(null),
+			onError: (falha) => {
+				definirIdConfirmandoRemocao(null);
+				definirErro(obterMensagemErro(falha));
+			},
+		});
+	}
+
 	return (
 		<CartaoConfiguracao
 			titulo="Bloqueios na agenda"
-			descricao="Feriados, férias ou manutenções: períodos fechados para reservas."
+			descricao="Feriados, férias ou manutenções: períodos fechados para novas reservas"
 		>
-			{carregandoBloqueios ? (
-				<p className="text-xs text-tinta-suave">Carregando bloqueios...</p>
-			) : bloqueios.length === 0 ? (
-				<p className="rounded-lg bg-superficie px-4 py-3 text-xs text-tinta-suave">
-					Nenhum bloqueio programado.
-				</p>
-			) : (
-				<ul className="space-y-2">
-					{bloqueios.map((bloqueio) => (
-						<li
-							key={bloqueio.id}
-							className="flex items-center justify-between gap-3 rounded-lg bg-superficie px-4 py-3"
-						>
-							<div className="min-w-0">
-								<p className="text-[13px] font-medium text-tinta">
-									{descreverPeriodo(bloqueio.dataHoraInicio, bloqueio.dataHoraFim)}
-								</p>
-								{bloqueio.motivo && (
-									<p className="mt-0.5 truncate text-[11px] text-tinta-suave">
-										{bloqueio.motivo}
-									</p>
-								)}
-							</div>
-							<button
-								type="button"
-								onClick={() =>
-									removerBloqueio.mutate(bloqueio.id, {
-										onError: (falha) => definirErro(obterMensagemErro(falha)),
-									})
-								}
-								disabled={removerBloqueio.isPending}
-								aria-label={`Remover bloqueio ${descreverPeriodo(bloqueio.dataHoraInicio, bloqueio.dataHoraFim)}`}
-								className="grid size-8 shrink-0 place-items-center rounded-lg transition hover:bg-perigo-fundo disabled:opacity-50"
-							>
-								<img src={icones.arredondado.fechar} alt="" width={14} height={14} />
-							</button>
-						</li>
-					))}
-				</ul>
-			)}
+			<div aria-live="polite">
+				{carregandoBloqueios ? (
+					<div className="space-y-2" aria-label="Carregando bloqueios…">
+						<div className="h-14 rounded-lg bg-superficie" />
+						<div className="h-14 rounded-lg bg-superficie" />
+					</div>
+				) : bloqueios.length === 0 ? (
+					<div className="rounded-lg border border-dashed border-borda bg-superficie/60 px-4 py-3.5">
+						<p className="text-xs font-medium text-tinta">
+							Nenhum bloqueio programado
+						</p>
+						<p className="mt-0.5 text-[11px] text-tinta-suave">
+							Adicione abaixo datas em que a empresa não abrirá excepcionalmente.
+						</p>
+					</div>
+				) : (
+					<ul className="space-y-2">
+						{bloqueios.map((bloqueio) => {
+							const confirmando = idConfirmandoRemocao === bloqueio.id;
+							const descricaoPeriodo = descreverPeriodo(
+								bloqueio.dataHoraInicio,
+								bloqueio.dataHoraFim,
+							);
+
+							return (
+								<li
+									key={bloqueio.id}
+									className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-borda/60 bg-superficie px-4 py-3"
+								>
+									<div className="min-w-0 flex-1">
+										<p className="text-[13px] font-medium tabular-nums text-tinta">
+											{descricaoPeriodo}
+										</p>
+										{bloqueio.motivo && (
+											<p className="mt-0.5 truncate text-xs text-tinta-suave">
+												{bloqueio.motivo}
+											</p>
+										)}
+									</div>
+
+									{confirmando ? (
+										<div className="flex items-center gap-2">
+											<button
+												type="button"
+												onClick={() => confirmarRemocao(bloqueio.id)}
+												disabled={removerBloqueio.isPending}
+												className="h-8 rounded-md bg-perigo px-3 text-xs font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50 [touch-action:manipulation]"
+											>
+												{removerBloqueio.isPending ? 'Removendo…' : 'Confirmar'}
+											</button>
+											<button
+												type="button"
+												onClick={() => definirIdConfirmandoRemocao(null)}
+												disabled={removerBloqueio.isPending}
+												className="h-8 rounded-md bg-white px-2.5 text-xs font-medium text-tinta-suave transition-colors hover:text-tinta [touch-action:manipulation]"
+											>
+												Cancelar
+											</button>
+										</div>
+									) : (
+										<button
+											type="button"
+											onClick={() => definirIdConfirmandoRemocao(bloqueio.id)}
+											disabled={removerBloqueio.isPending}
+											aria-label={`Remover bloqueio ${descricaoPeriodo}`}
+											className="grid size-9 shrink-0 place-items-center rounded-lg transition-colors hover:bg-perigo-fundo disabled:opacity-50 [touch-action:manipulation]"
+										>
+											<img
+												src={icones.arredondado.fechar}
+												alt=""
+												aria-hidden="true"
+												width={14}
+												height={14}
+											/>
+										</button>
+									)}
+								</li>
+							);
+						})}
+					</ul>
+				)}
+			</div>
 
 			{createPortal(
-				<form id={ID_FORMULARIO_BLOQUEIO} onSubmit={adicionar} noValidate hidden />,
+				<form
+					id={ID_FORMULARIO_BLOQUEIO}
+					onSubmit={adicionar}
+					noValidate
+					hidden
+				/>,
 				document.body,
 			)}
+
 			<div className="mt-6 border-t border-borda pt-6">
-				<div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+				<p className="text-xs font-semibold text-tinta">
+					Programar novo bloqueio
+				</p>
+				<div className="mt-3 grid gap-4 sm:grid-cols-2 sm:gap-6">
 					<CampoConfiguracao
 						id="bloqueio-inicio"
 						form={ID_FORMULARIO_BLOQUEIO}
 						rotulo="Início"
 						type="datetime-local"
 						value={inicio}
-						onChange={(evento) => definirInicio(evento.target.value)}
+						onChange={(evento) => {
+							definirErro(null);
+							definirInicio(evento.target.value);
+						}}
+						tabular
 					/>
 					<CampoConfiguracao
 						id="bloqueio-fim"
@@ -140,17 +214,36 @@ export function CartaoBloqueios() {
 						type="datetime-local"
 						value={fim}
 						min={inicio || undefined}
-						onChange={(evento) => definirFim(evento.target.value)}
+						onChange={(evento) => {
+							definirErro(null);
+							definirFim(evento.target.value);
+						}}
+						tabular
 					/>
 				</div>
-				<div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end">
+
+				<div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
 					<CampoConfiguracao
 						id="bloqueio-motivo"
 						form={ID_FORMULARIO_BLOQUEIO}
 						rotulo="Motivo (opcional)"
+						complementoRotulo={
+							<span className="flex items-center gap-1">
+								{SUGESTOES_MOTIVO.map((sugestao) => (
+									<button
+										key={sugestao}
+										type="button"
+										onClick={() => definirMotivo(sugestao)}
+										className="rounded bg-superficie px-1.5 py-0.5 text-[10px] font-medium text-tinta-suave transition-colors hover:bg-superficie-neutra hover:text-tinta [touch-action:manipulation]"
+									>
+										{sugestao}
+									</button>
+								))}
+							</span>
+						}
 						value={motivo}
 						onChange={(evento) => definirMotivo(evento.target.value)}
-						placeholder="Ex.: Feriado de Natal"
+						placeholder="Ex.: Feriado de Natal…"
 						maxLength={255}
 						className="flex-1"
 					/>
@@ -158,13 +251,17 @@ export function CartaoBloqueios() {
 						type="submit"
 						form={ID_FORMULARIO_BLOQUEIO}
 						disabled={criarBloqueio.isPending}
-						className="h-[46px] shrink-0 rounded-lg border border-marca-500 px-5 text-xs font-semibold text-marca-700 transition hover:bg-marca-50 disabled:opacity-60"
+						className="h-11 shrink-0 rounded-lg border border-marca-500 px-5 text-xs font-semibold text-marca-700 transition-colors hover:bg-marca-50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation]"
 					>
-						{criarBloqueio.isPending ? 'Adicionando...' : 'Adicionar bloqueio'}
+						{criarBloqueio.isPending ? 'Adicionando…' : 'Adicionar bloqueio'}
 					</button>
 				</div>
+
 				{erro && (
-					<p className="mt-4 rounded-lg bg-perigo-fundo px-4 py-3 text-xs text-perigo" role="alert">
+					<p
+						className="mt-4 rounded-lg bg-perigo-fundo px-4 py-3 text-xs font-medium text-perigo"
+						role="alert"
+					>
 						{erro}
 					</p>
 				)}

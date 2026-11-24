@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { LayoutPainel } from '../../../components/LayoutPainel';
@@ -18,8 +18,11 @@ import {
 	dadosOrganizacao,
 	formatarDocumento,
 	formularioDaApi,
+	formulariosIguais,
 	gradeDoFormulario,
-	validarFormulario,
+	ID_CAMPO_FORMULARIO,
+	validarCamposFormulario,
+	type ErrosFormularioConfiguracoes,
 	type FormularioConfiguracoes,
 } from '../formulario';
 import {
@@ -32,18 +35,95 @@ const ID_FORMULARIO = 'formulario-configuracoes';
 
 type Aviso = { tipo: 'sucesso' | 'erro'; texto: string };
 
+interface PropriedadesBotaoSalvar {
+	salvando: boolean;
+	cadastrando: boolean;
+	desabilitado: boolean;
+	className?: string;
+}
+
+function BotaoSalvarConfiguracoes({
+	salvando,
+	cadastrando,
+	desabilitado,
+	className = '',
+}: PropriedadesBotaoSalvar) {
+	const texto = salvando
+		? 'Salvando…'
+		: cadastrando
+			? 'Cadastrar empresa'
+			: 'Salvar alterações';
+
+	return (
+		<button
+			type="submit"
+			form={ID_FORMULARIO}
+			disabled={desabilitado || salvando}
+			className={`h-11 rounded-lg bg-marca-500 px-6 text-[13px] font-semibold text-petroleo transition-colors hover:bg-marca-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation] lg:w-[184px] lg:text-xs ${className}`}
+		>
+			{texto}
+		</button>
+	);
+}
+
+function EsqueletoConfiguracoes() {
+	return (
+		<div
+			role="status"
+			aria-live="polite"
+			aria-label="Carregando configurações…"
+			className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,432px)_minmax(0,1fr)] lg:items-start lg:gap-6"
+		>
+			<div className="space-y-6">
+				<div className="rounded-2xl border border-borda/80 bg-white p-6">
+					<div className="h-5 w-36 rounded bg-superficie-neutra" />
+					<div className="mt-2 h-3.5 w-56 rounded bg-superficie" />
+					<div className="mt-6 space-y-5">
+						<div className="h-16 rounded-lg bg-superficie" />
+						<div className="h-16 rounded-lg bg-superficie" />
+						<div className="h-16 rounded-lg bg-superficie" />
+						<div className="h-16 rounded-lg bg-superficie" />
+					</div>
+				</div>
+				<div className="h-64 rounded-2xl bg-petroleo/90 p-6" />
+			</div>
+			<div className="space-y-6">
+				<div className="h-64 rounded-2xl border border-borda/80 bg-white p-6" />
+				<div className="h-44 rounded-2xl border border-borda/80 bg-white p-6" />
+				<div className="h-44 rounded-2xl border border-borda/80 bg-white p-6" />
+			</div>
+			<span className="sr-only">Carregando configurações…</span>
+		</div>
+	);
+}
+
 export function PaginaConfiguracoes() {
 	const { usuario, sair } = usarAutenticacao();
 	const navegar = useNavigate();
 	const clienteConsultas = useQueryClient();
 	const { organizacao, carregando, erro, criar, atualizar } = usarOrganizacao();
 	const agenda = usarConfiguracoesAgenda(Boolean(organizacao));
-	const [formulario, definirFormulario] = useState<FormularioConfiguracoes | null>(null);
+
+	const [formulario, definirFormulario] =
+		useState<FormularioConfiguracoes | null>(null);
+	const [formularioBase, definirFormularioBase] =
+		useState<FormularioConfiguracoes | null>(null);
+	const [errosCampos, definirErrosCampos] =
+		useState<ErrosFormularioConfiguracoes>({});
 	const [aviso, definirAviso] = useState<Aviso | null>(null);
 	const [acabouDeCadastrar, definirAcabouDeCadastrar] = useState(false);
 
 	const cadastrando = !carregando && !erro && organizacao === null;
-	const salvando = criar.isPending || atualizar.isPending || agenda.salvarGrade.isPending;
+	const salvando =
+		criar.isPending || atualizar.isPending || agenda.salvarGrade.isPending;
+
+	const possuiAlteracoes = useMemo(
+		() =>
+			cadastrando
+				? Boolean(formulario)
+				: !formulariosIguais(formulario, formularioBase),
+		[cadastrando, formulario, formularioBase],
+	);
 
 	// Preenche o formulário uma única vez, quando os dados chegam da API.
 	useEffect(() => {
@@ -52,16 +132,53 @@ export function PaginaConfiguracoes() {
 		}
 
 		if (cadastrando) {
-			definirFormulario(criarFormularioInicial(usuario?.telefone ?? ''));
+			const inicial = criarFormularioInicial(usuario?.telefone ?? '');
+			definirFormulario(inicial);
+			definirFormularioBase(inicial);
 		} else if (organizacao && agenda.grade) {
-			definirFormulario(formularioDaApi(organizacao, agenda.grade));
+			const carregado = formularioDaApi(organizacao, agenda.grade);
+			definirFormulario(carregado);
+			definirFormularioBase(carregado);
 		}
 	}, [formulario, cadastrando, organizacao, agenda.grade, usuario?.telefone]);
 
-	const alterar: AlterarCampo = (campo, valor) => {
+	// Alerta antes de fechar ou recarregar a aba quando há mudanças pendentes.
+	useEffect(() => {
+		if (cadastrando || !possuiAlteracoes || salvando) {
+			return;
+		}
+
+		function aoSairDaPagina(evento: BeforeUnloadEvent): void {
+			evento.preventDefault();
+		}
+
+		window.addEventListener('beforeunload', aoSairDaPagina);
+		return () => window.removeEventListener('beforeunload', aoSairDaPagina);
+	}, [cadastrando, possuiAlteracoes, salvando]);
+
+	const alterar = useCallback<AlterarCampo>((campo, valor) => {
 		definirAviso(null);
-		definirFormulario((atual) => (atual ? { ...atual, [campo]: valor } : atual));
-	};
+		definirErrosCampos((atual) => {
+			if (!atual[campo]) {
+				return atual;
+			}
+			const copia = { ...atual };
+			delete copia[campo];
+			return copia;
+		});
+		definirFormulario((atual) =>
+			atual ? { ...atual, [campo]: valor } : atual,
+		);
+	}, []);
+
+	function descartarAlteracoes(): void {
+		if (!formularioBase) {
+			return;
+		}
+		definirFormulario(formularioBase);
+		definirErrosCampos({});
+		definirAviso(null);
+	}
 
 	async function salvar(evento: FormEvent<HTMLFormElement>): Promise<void> {
 		evento.preventDefault();
@@ -69,28 +186,49 @@ export function PaginaConfiguracoes() {
 			return;
 		}
 
-		const problema = validarFormulario(formulario, cadastrando);
-		if (problema) {
-			definirAviso({ tipo: 'erro', texto: problema });
+		const errosValidacao = validarCamposFormulario(formulario, cadastrando);
+		const camposComErro = Object.keys(errosValidacao) as Array<
+			keyof FormularioConfiguracoes
+		>;
+
+		if (camposComErro.length > 0) {
+			definirErrosCampos(errosValidacao);
+			const primeiroCampo = camposComErro[0];
+			const primeiroErro = errosValidacao[primeiroCampo];
+			definirAviso({
+				tipo: 'erro',
+				texto: primeiroErro ?? 'Revise os campos destacados antes de salvar.',
+			});
+
+			const idElemento = ID_CAMPO_FORMULARIO[primeiroCampo];
+			const elemento = document.getElementById(idElemento);
+			elemento?.focus();
 			return;
 		}
 
+		definirErrosCampos({});
 		definirAviso(null);
 		try {
+			let novoEstado = formulario;
+
 			if (cadastrando) {
 				const criada = await criar.mutateAsync({
 					...dadosOrganizacao(formulario),
 					documento: formulario.documento,
 				});
-				definirFormulario((atual) =>
-					atual ? { ...atual, documento: formatarDocumento(criada.documento) } : atual,
-				);
+				novoEstado = {
+					...formulario,
+					documento: formatarDocumento(criada.documento),
+				};
+				definirFormulario(novoEstado);
 			} else {
 				await atualizar.mutateAsync(dadosOrganizacao(formulario));
 			}
 
-			await agenda.salvarGrade.mutateAsync(gradeDoFormulario(formulario));
+			await agenda.salvarGrade.mutateAsync(gradeDoFormulario(novoEstado));
 			await clienteConsultas.invalidateQueries({ queryKey: CHAVE_GRADE_AGENDA });
+
+			definirFormularioBase(novoEstado);
 
 			if (cadastrando) {
 				definirAcabouDeCadastrar(true);
@@ -98,7 +236,7 @@ export function PaginaConfiguracoes() {
 			definirAviso({
 				tipo: 'sucesso',
 				texto: cadastrando
-					? 'Empresa cadastrada! Sua agenda já está pronta para receber reservas.'
+					? 'Empresa cadastrada com sucesso. Sua agenda já está pronta para receber reservas.'
 					: 'Alterações salvas com sucesso.',
 			});
 		} catch (falha) {
@@ -112,20 +250,25 @@ export function PaginaConfiguracoes() {
 		});
 	}
 
-	const textoBotao = salvando
-		? 'Salvando...'
-		: cadastrando
-			? 'Cadastrar empresa'
-			: 'Salvar alterações';
-	const botaoSalvar = (classes: string) => (
-		<button
-			type="submit"
-			form={ID_FORMULARIO}
-			disabled={!formulario || salvando}
-			className={`h-12 rounded-lg bg-marca-500 px-6 text-[13px] font-semibold text-petroleo transition hover:bg-marca-600 disabled:cursor-not-allowed disabled:opacity-60 lg:h-11 lg:w-[184px] lg:text-xs ${classes}`}
-		>
-			{textoBotao}
-		</button>
+	const acaoCabecalho = (
+		<div className="flex w-full flex-wrap items-center justify-end gap-3 lg:mt-1.5 lg:w-auto">
+			{!cadastrando && possuiAlteracoes && (
+				<button
+					type="button"
+					onClick={descartarAlteracoes}
+					disabled={salvando}
+					className="h-11 rounded-lg border border-borda bg-white px-4 text-xs font-medium text-tinta-suave transition-colors hover:text-tinta disabled:opacity-50 [touch-action:manipulation]"
+				>
+					Descartar
+				</button>
+			)}
+			<BotaoSalvarConfiguracoes
+				salvando={salvando}
+				cadastrando={cadastrando}
+				desabilitado={!formulario}
+				className="flex-1 lg:flex-none"
+			/>
+		</div>
 	);
 
 	return (
@@ -134,46 +277,68 @@ export function PaginaConfiguracoes() {
 			titulo="Configurações"
 			descricao={
 				cadastrando
-					? 'Cadastre sua empresa para começar a receber agendamentos.'
-					: 'Defina como e quando sua empresa atende.'
+					? 'Cadastre sua empresa para começar a receber agendamentos'
+					: 'Defina como e quando sua empresa atende'
 			}
 			empresa={{
-				nome: organizacao?.nomeFantasia ?? 'Sua empresa',
-				detalhe: organizacao?.endereco || (organizacao ? 'Endereço não informado' : 'Cadastro pendente'),
+				nome:
+					formulario?.nomeFantasia.trim() ||
+					organizacao?.nomeFantasia ||
+					'Sua empresa',
+				detalhe:
+					formulario?.endereco.trim() ||
+					organizacao?.endereco ||
+					(organizacao ? 'Endereço não informado' : 'Cadastro pendente'),
 			}}
-			acao={botaoSalvar('w-full lg:mt-1.5')}
+			acao={acaoCabecalho}
 			aoSair={encerrarSessao}
 			saindo={sair.isPending}
 		>
 			{erro || agenda.erroGrade ? (
-				<p className="rounded-[14px] bg-white p-6 text-sm text-perigo" role="alert">
-					{obterMensagemErro(erro ?? agenda.erroGrade)}
-				</p>
+				<div
+					className="rounded-2xl border border-perigo/20 bg-white p-6 text-sm text-perigo"
+					role="alert"
+				>
+					<p className="font-semibold">
+						Não foi possível carregar as configurações
+					</p>
+					<p className="mt-1 text-xs text-tinta-suave">
+						{obterMensagemErro(erro ?? agenda.erroGrade)}
+					</p>
+				</div>
 			) : !formulario ? (
-				<p className="rounded-[14px] bg-white p-6 text-sm text-tinta-suave">
-					Carregando configurações...
-				</p>
+				<EsqueletoConfiguracoes />
 			) : (
 				<>
 					{cadastrando && (
-						<p className="mb-5 rounded-[14px] border border-marca-500/30 bg-marca-50 px-5 py-4 text-[13px] text-marca-700">
-							Falta pouco! Preencha os dados da sua empresa e as regras da agenda para
-							liberar as demais áreas do AgendaJá.
-						</p>
+						<div className="mb-6 flex items-start gap-3 rounded-2xl border border-marca-500/30 bg-marca-50 px-5 py-4 text-[13px] text-marca-700">
+							<span
+								aria-hidden="true"
+								className="mt-1.5 size-2 shrink-0 rounded-full bg-marca-500"
+							/>
+							<p>
+								Preencha os dados da empresa e o expediente abaixo para liberar
+								os agendamentos e as demais áreas do AgendaJá.
+							</p>
+						</div>
 					)}
 
 					{aviso && (
 						<div
 							role={aviso.tipo === 'erro' ? 'alert' : 'status'}
-							className={`mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[14px] px-5 py-4 text-[13px] ${
+							aria-live="polite"
+							className={`mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4 text-[13px] ${
 								aviso.tipo === 'erro'
-									? 'bg-perigo-fundo text-perigo'
-									: 'bg-marca-50 font-medium text-marca-700'
+									? 'border border-perigo/20 bg-perigo-fundo text-perigo'
+									: 'border border-marca-500/30 bg-marca-50 font-medium text-marca-700'
 							}`}
 						>
-							{aviso.texto}
+							<span>{aviso.texto}</span>
 							{acabouDeCadastrar && aviso.tipo === 'sucesso' && (
-								<Link to="/" className="font-semibold underline">
+								<Link
+									to="/"
+									className="font-semibold underline underline-offset-2"
+								>
 									Ir para o início
 								</Link>
 							)}
@@ -184,7 +349,7 @@ export function PaginaConfiguracoes() {
 						id={ID_FORMULARIO}
 						onSubmit={(evento) => void salvar(evento)}
 						noValidate
-						className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,432px)_minmax(0,1fr)] lg:items-start lg:gap-6"
+						className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,432px)_minmax(0,1fr)] lg:items-start lg:gap-6"
 					>
 						{/* No mobile, `contents` deixa os cartões em uma coluna única ordenada pelo `order`. */}
 						<div className="contents lg:flex lg:flex-col lg:gap-6">
@@ -192,23 +357,51 @@ export function PaginaConfiguracoes() {
 								formulario={formulario}
 								alterar={alterar}
 								cadastrando={cadastrando}
+								erros={errosCampos}
 							/>
 							<div className="order-last lg:order-none">
-								<CartaoSobreDisponibilidade
-									capacidade={Number(formulario.capacidadeSimultanea) || 1}
-								/>
+								<CartaoSobreDisponibilidade formulario={formulario} />
 							</div>
 						</div>
 						<div className="contents lg:flex lg:flex-col lg:gap-6">
-							<CartaoFuncionamento formulario={formulario} alterar={alterar} />
-							<CartaoPausa formulario={formulario} alterar={alterar} />
-							<CartaoDuracaoPadrao formulario={formulario} alterar={alterar} />
+							<CartaoFuncionamento
+								formulario={formulario}
+								alterar={alterar}
+								erros={errosCampos}
+							/>
+							<CartaoPausa
+								formulario={formulario}
+								alterar={alterar}
+								erros={errosCampos}
+							/>
+							<CartaoDuracaoPadrao
+								formulario={formulario}
+								alterar={alterar}
+								erros={errosCampos}
+							/>
 							{/* Só existe depois do cadastro: bloqueios pertencem a uma empresa. */}
-							{organizacao && <CartaoBloqueios />}
+							{organizacao && <CartaoBloqueios agenda={agenda} />}
 						</div>
 					</form>
 
-					<div className="mt-5 lg:hidden">{botaoSalvar('w-full')}</div>
+					<div className="mt-6 flex items-center gap-3 lg:hidden">
+						{!cadastrando && possuiAlteracoes && (
+							<button
+								type="button"
+								onClick={descartarAlteracoes}
+								disabled={salvando}
+								className="h-11 rounded-lg border border-borda bg-white px-4 text-xs font-medium text-tinta-suave transition-colors hover:text-tinta"
+							>
+								Descartar
+							</button>
+						)}
+						<BotaoSalvarConfiguracoes
+							salvando={salvando}
+							cadastrando={cadastrando}
+							desabilitado={!formulario}
+							className="flex-1"
+						/>
+					</div>
 				</>
 			)}
 		</LayoutPainel>
