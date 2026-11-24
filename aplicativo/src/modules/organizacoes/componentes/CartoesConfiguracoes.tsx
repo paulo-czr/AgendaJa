@@ -62,7 +62,7 @@ export function CartaoDadosEmpresa({
 					rotulo="CPF ou CNPJ"
 					complementoRotulo={
 						!cadastrando ? (
-							<span className="rounded bg-superficie-neutra px-2 py-0.5 text-[11px] font-medium text-tinta-suave">
+							<span className="rounded bg-cor-superficie-neutra px-2 py-0.5 text-[11px] font-medium text-cor-fonte-secundaria">
 								Registrado
 							</span>
 						) : undefined
@@ -132,56 +132,56 @@ export function CartaoIdentidadePublica({
 	return (
 		<section
 			aria-label="Prévia da empresa para os clientes"
-			className="rounded-2xl border border-borda/80 bg-white p-5 shadow-[0_1px_2px_rgba(14,41,57,0.04)] sm:p-6"
+			className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-5 shadow-sutil sm:p-6"
 		>
 			<div className="flex items-center justify-between gap-3">
-				<span className="inline-flex items-center gap-2 text-xs font-medium text-marca-700">
+				<span className="inline-flex items-center gap-2 text-xs font-medium text-cor-primaria-escura">
 					<span
 						aria-hidden="true"
-						className="size-2 rounded-full bg-marca-500"
+						className="size-2 rounded-full bg-cor-primaria"
 					/>
 					Visualização do cliente
 				</span>
-				<span className="rounded-md bg-marca-50 px-2.5 py-1 text-[11px] font-semibold text-marca-700">
+				<span className="rounded-md bg-cor-primaria-suave px-2.5 py-1 text-[11px] font-semibold text-cor-primaria-escura">
 					Comprovantes e avisos
 				</span>
 			</div>
 
-			<h2 className="mt-3 text-lg font-semibold text-tinta">
+			<h2 className="mt-3 text-lg font-semibold text-cor-fonte-primaria">
 				Identidade nos agendamentos
 			</h2>
-			<p className="mt-1 text-xs leading-5 text-tinta-suave">
+			<p className="mt-1 text-xs leading-5 text-cor-fonte-secundaria">
 				Como seus clientes visualizam a empresa no WhatsApp e no resumo do agendamento.
 			</p>
 
-			<div className="mt-6 rounded-xl border border-borda/80 bg-superficie p-5">
+			<div className="mt-6 rounded-xl border border-cor-borda/80 bg-cor-fundo p-5">
 				<div className="flex items-center gap-3">
-					<div className="grid size-11 shrink-0 place-items-center rounded-xl bg-petroleo font-bold text-white shadow-sm">
+					<div className="grid size-11 shrink-0 place-items-center rounded-xl bg-cor-secundaria font-bold text-cor-fonte-invertida shadow-sm">
 						{nome.charAt(0).toUpperCase()}
 					</div>
 					<div className="min-w-0 flex-1">
-						<p className="truncate text-base font-bold text-tinta">{nome}</p>
-						<p className="truncate text-xs tabular-nums text-tinta-suave">
+						<p className="truncate text-base font-bold text-cor-fonte-primaria">{nome}</p>
+						<p className="truncate text-xs tabular-nums text-cor-fonte-secundaria">
 							{documento}
 						</p>
 					</div>
 				</div>
 
-				<div className="mt-5 space-y-2.5 border-t border-borda/70 pt-4 text-xs">
+				<div className="mt-5 space-y-2.5 border-t border-cor-borda/70 pt-4 text-xs">
 					<div className="flex items-center justify-between gap-2">
-						<span className="text-tinta-suave">Contato</span>
-						<span className="font-medium tabular-nums text-tinta">{telefone}</span>
+						<span className="text-cor-fonte-secundaria">Contato</span>
+						<span className="font-medium tabular-nums text-cor-fonte-primaria">{telefone}</span>
 					</div>
 					<div className="flex items-start justify-between gap-4">
-						<span className="shrink-0 text-tinta-suave">Endereço</span>
-						<span className="truncate text-right font-medium text-tinta">
+						<span className="shrink-0 text-cor-fonte-secundaria">Endereço</span>
+						<span className="truncate text-right font-medium text-cor-fonte-primaria">
 							{endereco}
 						</span>
 					</div>
 				</div>
 			</div>
 
-			<p className="mt-5 text-xs leading-5 text-tinta-suave">
+			<p className="mt-5 text-xs leading-5 text-cor-fonte-secundaria">
 				Manter o telefone e o endereço atualizados garante que os lembretes automáticos orientem o cliente corretamente.
 			</p>
 		</section>
@@ -225,8 +225,8 @@ export function CartaoFuncionamento({
 								aria-pressed={selecionado}
 								className={`h-7 rounded-md px-2.5 text-[11px] font-medium transition-colors [touch-action:manipulation] ${
 									selecionado
-										? 'bg-marca-50 text-marca-700'
-										: 'bg-superficie text-tinta-suave hover:bg-superficie-neutra hover:text-tinta'
+										? 'bg-cor-primaria-suave text-cor-primaria-escura'
+										: 'bg-cor-fundo text-cor-fonte-secundaria hover:bg-cor-superficie-neutra hover:text-cor-fonte-primaria'
 								}`}
 							>
 								{atalho.rotulo}
@@ -255,15 +255,15 @@ export function CartaoFuncionamento({
 							aria-label={dia.nome}
 							className={`flex h-14 flex-col items-center justify-center gap-1 rounded-lg border text-xs transition-colors [touch-action:manipulation] active:scale-[0.98] sm:h-16 sm:text-[13px] ${
 								ativo
-									? 'border-marca-500/40 bg-marca-50 font-semibold text-marca-700'
-									: 'border-transparent bg-superficie font-medium text-tinta-suave hover:bg-superficie-neutra hover:text-tinta'
+									? 'border-cor-primaria/40 bg-cor-primaria-suave font-semibold text-cor-primaria-escura'
+									: 'border-transparent bg-cor-fundo font-medium text-cor-fonte-secundaria hover:bg-cor-superficie-neutra hover:text-cor-fonte-primaria'
 							}`}
 						>
 							<span>{dia.sigla}</span>
 							<span
 								aria-hidden="true"
 								className={`grid size-4 place-items-center rounded-full ${
-									ativo ? 'bg-marca-500/20' : ''
+									ativo ? 'bg-cor-primaria/20' : ''
 								}`}
 							>
 								{ativo ? (
@@ -275,7 +275,7 @@ export function CartaoFuncionamento({
 										height={12}
 									/>
 								) : (
-									<span className="size-1.5 rounded-full bg-tinta-suave/30" />
+									<span className="size-1.5 rounded-full bg-cor-fonte-secundaria/30" />
 								)}
 							</span>
 						</button>
@@ -286,7 +286,7 @@ export function CartaoFuncionamento({
 			{erros?.diasAtivos && (
 				<p
 					role="alert"
-					className="mt-2 text-[11px] font-medium text-perigo"
+					className="mt-2 text-[11px] font-medium text-cor-perigo"
 				>
 					{erros.diasAtivos}
 				</p>
@@ -348,8 +348,8 @@ export function CartaoPausa({
 					aria-pressed={possuiPausa}
 					className={`h-7 rounded-md px-2.5 text-[11px] font-medium transition-colors [touch-action:manipulation] ${
 						possuiPausa
-							? 'bg-superficie text-tinta-suave hover:bg-perigo-fundo hover:text-perigo'
-							: 'bg-marca-50 text-marca-700 hover:bg-marca-500/20'
+							? 'bg-cor-fundo text-cor-fonte-secundaria hover:bg-cor-perigo-fundo hover:text-cor-perigo'
+							: 'bg-cor-primaria-suave text-cor-primaria-escura hover:bg-cor-primaria/20'
 					}`}
 				>
 					{possuiPausa ? 'Remover pausa' : 'Definir pausa (12:00–13:00)'}
@@ -376,7 +376,7 @@ export function CartaoPausa({
 					erro={erros?.fimPausa}
 				/>
 			</div>
-			<p className="mt-3 text-xs text-tinta-suave">
+			<p className="mt-3 text-xs text-cor-fonte-secundaria">
 				{possuiPausa
 					? `Agenda pausada das ${formulario.inicioPausa || '--:--'} às ${formulario.fimPausa || '--:--'} nos dias ativos.`
 					: 'Sem pausa configurada: o expediente permanece contínuo do início ao fim.'}
@@ -403,7 +403,7 @@ export function CartaoDuracaoPadrao({
 				<div>
 					<label
 						htmlFor="duracao-padrao"
-						className="block text-xs font-medium text-tinta"
+						className="block text-xs font-medium text-cor-fonte-primaria"
 					>
 						Duração padrão do atendimento
 					</label>
@@ -416,13 +416,13 @@ export function CartaoDuracaoPadrao({
 							onChange={(evento) =>
 								alterar('duracaoPadraoMinutos', Number(evento.target.value))
 							}
-							className="h-11 w-full cursor-pointer appearance-none rounded-lg border border-borda bg-superficie pl-3.5 pr-10 text-[13px] font-medium tabular-nums text-tinta transition-colors focus-visible:border-marca-500 focus-visible:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-marca-500/25"
+							className="h-11 w-full cursor-pointer appearance-none rounded-lg border border-cor-borda bg-cor-fundo pl-3.5 pr-10 text-[13px] font-medium tabular-nums text-cor-fonte-primaria transition-colors focus-visible:border-cor-primaria focus-visible:bg-cor-superficie focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cor-primaria/25"
 						>
 							{DURACOES_PADRAO.map((duracao) => (
 								<option
 									key={duracao}
 									value={duracao}
-									className="bg-white text-tinta"
+									className="bg-cor-superficie text-cor-fonte-primaria"
 								>
 									{duracao} minutos
 								</option>
@@ -439,7 +439,7 @@ export function CartaoDuracaoPadrao({
 					</div>
 					<p
 						id="duracao-padrao-ajuda"
-						className="mt-1.5 text-[11px] leading-4 text-tinta-suave"
+						className="mt-1.5 text-[11px] leading-4 text-cor-fonte-secundaria"
 					>
 						Aplicada quando o serviço não define duração própria.
 					</p>
@@ -503,34 +503,34 @@ export function CartaoSobreDisponibilidade({
 	return (
 		<section
 			aria-label="Resumo da disponibilidade configurada"
-			className="rounded-2xl bg-petroleo p-5 text-white sm:p-6"
+			className="rounded-2xl bg-cor-secundaria p-5 text-cor-fonte-invertida sm:p-6"
 		>
 			<div className="flex items-center justify-between gap-3">
-				<span className="inline-flex items-center gap-2 text-xs font-medium text-marca-500">
+				<span className="inline-flex items-center gap-2 text-xs font-medium text-cor-primaria">
 					<span
 						aria-hidden="true"
-						className="size-2 rounded-full bg-marca-500"
+						className="size-2 rounded-full bg-cor-primaria"
 					/>
 					Simulação do expediente
 				</span>
-				<span className="rounded-md bg-petroleo-800 px-2.5 py-1 text-[11px] font-medium tabular-nums text-nevoa-clara">
+				<span className="rounded-md bg-cor-secundaria-suave px-2.5 py-1 text-[11px] font-medium tabular-nums text-cor-fonte-invertida-suave">
 					{resumo.rotuloDias}
 				</span>
 			</div>
 
-			<h2 className="mt-3 text-xl font-semibold leading-snug text-white text-balance">
+			<h2 className="mt-3 text-xl font-semibold leading-snug text-cor-fonte-invertida text-balance">
 				Sua agenda em funcionamento
 			</h2>
-			<p className="mt-1.5 text-xs leading-5 text-nevoa-clara">
+			<p className="mt-1.5 text-xs leading-5 text-cor-fonte-invertida-suave">
 				Veja como cada dia ativo é dividido a partir das regras ao lado.
 			</p>
 
 			{/* Régua Gráfica do Dia */}
-			<div className="mt-6 rounded-xl bg-petroleo-800 p-4">
-				<div className="flex items-center justify-between text-[11px] font-medium tabular-nums text-nevoa-clara">
+			<div className="mt-6 rounded-xl bg-cor-secundaria-suave p-4">
+				<div className="flex items-center justify-between text-[11px] font-medium tabular-nums text-cor-fonte-invertida-suave">
 					<span>{estadoPadrao.horarioAbertura || '--:--'}</span>
 					{possuiPausaValida && (
-						<span className="text-nevoa-escura">
+						<span className="text-cor-fonte-invertida-mutada">
 							Pausa {estadoPadrao.inicioPausa}–{estadoPadrao.fimPausa}
 						</span>
 					)}
@@ -538,47 +538,47 @@ export function CartaoSobreDisponibilidade({
 				</div>
 
 				<div
-					className="mt-2.5 flex h-3 w-full overflow-hidden rounded-md bg-petroleo-700 p-0.5 gap-1"
+					className="mt-2.5 flex h-3 w-full overflow-hidden rounded-md bg-cor-secundaria-borda p-0.5 gap-1"
 					aria-hidden="true"
 				>
 					{resumo.valido ? (
 						<>
 							<div
 								style={{ width: `${resumo.percentualAntesPausa}%` }}
-								className="h-full rounded-sm bg-marca-500 transition-[width] duration-200"
+								className="h-full rounded-sm bg-cor-primaria transition-[width] duration-200"
 							/>
 							{possuiPausaValida && (
 								<div
 									style={{ width: `${resumo.percentualPausa}%` }}
-									className="h-full rounded-sm bg-petroleo-700/90 border border-dashed border-nevoa-escura/50 transition-[width] duration-200"
+									className="h-full rounded-sm bg-cor-secundaria-borda/90 border border-dashed border-cor-fonte-invertida-mutada/50 transition-[width] duration-200"
 								/>
 							)}
 							{resumo.percentualDepoisPausa > 0 && (
 								<div
 									style={{ width: `${resumo.percentualDepoisPausa}%` }}
-									className="h-full rounded-sm bg-marca-500 transition-[width] duration-200"
+									className="h-full rounded-sm bg-cor-primaria transition-[width] duration-200"
 								/>
 							)}
 						</>
 					) : (
-						<div className="h-full w-full rounded-sm bg-perigo/60" />
+						<div className="h-full w-full rounded-sm bg-cor-perigo/60" />
 					)}
 				</div>
 
-				<div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-nevoa-media">
+				<div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-cor-fonte-invertida-media">
 					<span className="inline-flex items-center gap-1.5">
 						<span
 							aria-hidden="true"
-							className="size-2 rounded-sm bg-marca-500"
+							className="size-2 rounded-sm bg-cor-primaria"
 						/>
 						Expediente líquido:{' '}
-						<strong className="font-semibold tabular-nums text-white">
+						<strong className="font-semibold tabular-nums text-cor-fonte-invertida">
 							{resumo.horasFormatadas}
 						</strong>
 					</span>
 					<span>
 						Blocos de{' '}
-						<strong className="font-semibold tabular-nums text-white">
+						<strong className="font-semibold tabular-nums text-cor-fonte-invertida">
 							{estadoPadrao.duracaoPadraoMinutos}&nbsp;min
 						</strong>
 					</span>
@@ -587,24 +587,24 @@ export function CartaoSobreDisponibilidade({
 
 			{/* Métricas Tabulares */}
 			<dl className="mt-4 grid grid-cols-2 gap-3">
-				<div className="rounded-xl bg-petroleo-800/80 px-3.5 py-3">
-					<dt className="text-[11px] text-nevoa-media">Horários por dia</dt>
-					<dd className="mt-1 text-xl font-semibold tabular-nums text-white">
+				<div className="rounded-xl bg-cor-secundaria-suave/80 px-3.5 py-3">
+					<dt className="text-[11px] text-cor-fonte-invertida-media">Horários por dia</dt>
+					<dd className="mt-1 text-xl font-semibold tabular-nums text-cor-fonte-invertida">
 						{resumo.horariosPorDia}
 					</dd>
 				</div>
-				<div className="rounded-xl bg-petroleo-800/80 px-3.5 py-3">
-					<dt className="text-[11px] text-nevoa-media">Capacidade diária</dt>
-					<dd className="mt-1 text-xl font-semibold tabular-nums text-marca-500">
+				<div className="rounded-xl bg-cor-secundaria-suave/80 px-3.5 py-3">
+					<dt className="text-[11px] text-cor-fonte-invertida-media">Capacidade diária</dt>
+					<dd className="mt-1 text-xl font-semibold tabular-nums text-cor-primaria">
 						{resumo.atendimentosPorDia}{' '}
-						<span className="text-xs font-normal text-nevoa-clara">
+						<span className="text-xs font-normal text-cor-fonte-invertida-suave">
 							{resumo.atendimentosPorDia === 1 ? 'vaga' : 'vagas'}
 						</span>
 					</dd>
 				</div>
 			</dl>
 
-			<p className="mt-4 text-xs leading-5 text-nevoa-clara">
+			<p className="mt-4 text-xs leading-5 text-cor-fonte-invertida-suave">
 				{capacidadeAtual > 1
 					? `Até ${capacidadeAtual} clientes podem reservar o mesmo horário simultaneamente.`
 					: 'Um atendimento por horário, sem sobreposição de clientes.'}

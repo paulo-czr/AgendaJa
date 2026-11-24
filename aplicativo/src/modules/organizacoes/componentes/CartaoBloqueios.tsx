@@ -120,15 +120,15 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 			<div aria-live="polite">
 				{carregandoBloqueios ? (
 					<div className="space-y-2" aria-label="Carregando bloqueios…">
-						<div className="h-14 rounded-lg bg-superficie" />
-						<div className="h-14 rounded-lg bg-superficie" />
+						<div className="h-14 rounded-lg bg-cor-fundo" />
+						<div className="h-14 rounded-lg bg-cor-fundo" />
 					</div>
 				) : bloqueios.length === 0 ? (
-					<div className="rounded-lg border border-dashed border-borda bg-superficie/60 px-4 py-3.5">
-						<p className="text-xs font-medium text-tinta">
+					<div className="rounded-lg border border-dashed border-cor-borda bg-cor-fundo/60 px-4 py-3.5">
+						<p className="text-xs font-medium text-cor-fonte-primaria">
 							Nenhum bloqueio programado
 						</p>
-						<p className="mt-0.5 text-[11px] text-tinta-suave">
+						<p className="mt-0.5 text-[11px] text-cor-fonte-secundaria">
 							Adicione abaixo datas em que a empresa não abrirá excepcionalmente.
 						</p>
 					</div>
@@ -144,14 +144,14 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 							return (
 								<li
 									key={bloqueio.id}
-									className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-borda/60 bg-superficie px-4 py-3"
+									className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-cor-borda/60 bg-cor-fundo px-4 py-3"
 								>
 									<div className="min-w-0 flex-1">
-										<p className="text-[13px] font-medium tabular-nums text-tinta">
+										<p className="text-[13px] font-medium tabular-nums text-cor-fonte-primaria">
 											{descricaoPeriodo}
 										</p>
 										{bloqueio.motivo && (
-											<p className="mt-0.5 truncate text-xs text-tinta-suave">
+											<p className="mt-0.5 truncate text-xs text-cor-fonte-secundaria">
 												{bloqueio.motivo}
 											</p>
 										)}
@@ -163,7 +163,7 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 												type="button"
 												onClick={() => confirmarRemocao(bloqueio.id)}
 												disabled={removerBloqueio.isPending}
-												className="h-8 rounded-md bg-perigo px-3 text-xs font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50 [touch-action:manipulation]"
+												className="h-8 rounded-md bg-cor-perigo px-3 text-xs font-semibold text-cor-fonte-invertida transition-colors hover:opacity-90 disabled:opacity-50 [touch-action:manipulation]"
 											>
 												{removerBloqueio.isPending ? 'Removendo…' : 'Confirmar'}
 											</button>
@@ -171,7 +171,7 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 												type="button"
 												onClick={() => definirIdConfirmandoRemocao(null)}
 												disabled={removerBloqueio.isPending}
-												className="h-8 rounded-md bg-white px-2.5 text-xs font-medium text-tinta-suave transition-colors hover:text-tinta [touch-action:manipulation]"
+												className="h-8 rounded-md bg-cor-superficie px-2.5 text-xs font-medium text-cor-fonte-secundaria transition-colors hover:text-cor-fonte-primaria [touch-action:manipulation]"
 											>
 												Cancelar
 											</button>
@@ -182,7 +182,7 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 											onClick={() => definirIdConfirmandoRemocao(bloqueio.id)}
 											disabled={removerBloqueio.isPending}
 											aria-label={`Remover bloqueio ${descricaoPeriodo}`}
-											className="grid size-9 shrink-0 place-items-center rounded-lg transition-colors hover:bg-perigo-fundo disabled:opacity-50 [touch-action:manipulation]"
+											className="grid size-9 shrink-0 place-items-center rounded-lg transition-colors hover:bg-cor-perigo-fundo disabled:opacity-50 [touch-action:manipulation]"
 										>
 											<img
 												src={icones.arredondado.fechar}
@@ -205,8 +205,8 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 				document.body,
 			)}
 
-			<div className="mt-6 border-t border-borda pt-6">
-				<p className="text-xs font-semibold text-tinta">Programar novo bloqueio</p>
+			<div className="mt-6 border-t border-cor-borda pt-6">
+				<p className="text-xs font-semibold text-cor-fonte-primaria">Programar novo bloqueio</p>
 				<div className="mt-3 grid gap-4 sm:grid-cols-2 sm:gap-6">
 					<CampoConfiguracao
 						id="bloqueio-inicio"
@@ -247,7 +247,7 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 										key={sugestao}
 										type="button"
 										onClick={() => definirMotivo(sugestao)}
-										className="rounded bg-superficie px-1.5 py-0.5 text-[10px] font-medium text-tinta-suave transition-colors hover:bg-superficie-neutra hover:text-tinta [touch-action:manipulation]"
+										className="rounded bg-cor-fundo px-1.5 py-0.5 text-[10px] font-medium text-cor-fonte-secundaria transition-colors hover:bg-cor-superficie-neutra hover:text-cor-fonte-primaria [touch-action:manipulation]"
 									>
 										{sugestao}
 									</button>
@@ -264,7 +264,7 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 						type="submit"
 						form={ID_FORMULARIO_BLOQUEIO}
 						disabled={criarBloqueio.isPending}
-						className="h-11 shrink-0 rounded-lg border border-marca-500 px-5 text-xs font-semibold text-marca-700 transition-colors hover:bg-marca-50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation]"
+						className="h-11 shrink-0 rounded-lg border border-cor-primaria px-5 text-xs font-semibold text-cor-primaria-escura transition-colors hover:bg-cor-primaria-suave active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation]"
 					>
 						{criarBloqueio.isPending ? 'Adicionando…' : 'Adicionar bloqueio'}
 					</button>
@@ -272,7 +272,7 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 
 				{erro && (
 					<p
-						className="mt-4 rounded-lg bg-perigo-fundo px-4 py-3 text-xs font-medium text-perigo"
+						className="mt-4 rounded-lg bg-cor-perigo-fundo px-4 py-3 text-xs font-medium text-cor-perigo"
 						role="alert"
 					>
 						{erro}

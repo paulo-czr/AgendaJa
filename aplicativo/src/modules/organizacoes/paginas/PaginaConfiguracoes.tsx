@@ -68,7 +68,7 @@ function BotaoSalvarConfiguracoes({
 			type="submit"
 			form={ID_FORMULARIO}
 			disabled={desabilitado || salvando}
-			className={`h-11 rounded-lg bg-marca-500 px-6 text-[13px] font-semibold text-petroleo transition-colors hover:bg-marca-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation] lg:w-[184px] lg:text-xs ${className}`}
+			className={`h-11 rounded-lg bg-cor-primaria px-6 text-[13px] font-semibold text-cor-secundaria transition-colors hover:bg-cor-primaria-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation] lg:w-[184px] lg:text-xs ${className}`}
 		>
 			{texto}
 		</button>
@@ -83,19 +83,19 @@ function EsqueletoConfiguracoes() {
 			aria-label="Carregando configurações…"
 			className="space-y-6"
 		>
-			<div className="h-12 w-80 rounded-xl bg-superficie-neutra" />
+			<div className="h-12 w-80 rounded-xl bg-cor-superficie-neutra" />
 			<div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start">
-				<div className="rounded-2xl border border-borda/80 bg-white p-6">
-					<div className="h-5 w-36 rounded bg-superficie-neutra" />
-					<div className="mt-2 h-3.5 w-56 rounded bg-superficie" />
+				<div className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-6">
+					<div className="h-5 w-36 rounded bg-cor-superficie-neutra" />
+					<div className="mt-2 h-3.5 w-56 rounded bg-cor-fundo" />
 					<div className="mt-6 space-y-5">
-						<div className="h-16 rounded-lg bg-superficie" />
-						<div className="h-16 rounded-lg bg-superficie" />
-						<div className="h-16 rounded-lg bg-superficie" />
-						<div className="h-16 rounded-lg bg-superficie" />
+						<div className="h-16 rounded-lg bg-cor-fundo" />
+						<div className="h-16 rounded-lg bg-cor-fundo" />
+						<div className="h-16 rounded-lg bg-cor-fundo" />
+						<div className="h-16 rounded-lg bg-cor-fundo" />
 					</div>
 				</div>
-				<div className="h-64 rounded-2xl bg-petroleo/90 p-6" />
+				<div className="h-64 rounded-2xl bg-cor-secundaria/90 p-6" />
 			</div>
 			<span className="sr-only">Carregando configurações…</span>
 		</div>
@@ -297,7 +297,7 @@ export function PaginaConfiguracoes() {
 			descricao: 'Dados cadastrais e contato público',
 			badge:
 				errosEmpresa > 0 ? (
-					<span className="grid size-4 place-items-center rounded-full bg-perigo text-[10px] font-bold text-white">
+					<span className="grid size-4 place-items-center rounded-full bg-cor-perigo text-[10px] font-bold text-cor-fonte-invertida">
 						{errosEmpresa}
 					</span>
 				) : undefined,
@@ -308,7 +308,7 @@ export function PaginaConfiguracoes() {
 			descricao: 'Expediente, intervalos e duração padrão',
 			badge:
 				errosAtendimento > 0 ? (
-					<span className="grid size-4 place-items-center rounded-full bg-perigo text-[10px] font-bold text-white">
+					<span className="grid size-4 place-items-center rounded-full bg-cor-perigo text-[10px] font-bold text-cor-fonte-invertida">
 						{errosAtendimento}
 					</span>
 				) : undefined,
@@ -319,7 +319,7 @@ export function PaginaConfiguracoes() {
 			descricao: 'Feriados, férias e manutenções',
 			badge:
 				organizacao && agenda.bloqueios.length > 0 ? (
-					<span className="rounded bg-superficie px-1.5 py-0.5 text-[10px] font-semibold text-tinta-suave">
+					<span className="rounded bg-cor-fundo px-1.5 py-0.5 text-[10px] font-semibold text-cor-fonte-secundaria">
 						{agenda.bloqueios.length}
 					</span>
 				) : undefined,
@@ -333,7 +333,7 @@ export function PaginaConfiguracoes() {
 					type="button"
 					onClick={descartarAlteracoes}
 					disabled={salvando}
-					className="h-11 rounded-lg border border-borda bg-white px-4 text-xs font-medium text-tinta-suave transition-colors hover:text-tinta disabled:opacity-50 [touch-action:manipulation]"
+					className="h-11 rounded-lg border border-cor-borda bg-cor-superficie px-4 text-xs font-medium text-cor-fonte-secundaria transition-colors hover:text-cor-fonte-primaria disabled:opacity-50 [touch-action:manipulation]"
 				>
 					Descartar
 				</button>
@@ -372,11 +372,11 @@ export function PaginaConfiguracoes() {
 		>
 			{erro || agenda.erroGrade ? (
 				<div
-					className="rounded-2xl border border-perigo/20 bg-white p-6 text-sm text-perigo"
+					className="rounded-2xl border border-cor-perigo/20 bg-cor-superficie p-6 text-sm text-cor-perigo"
 					role="alert"
 				>
 					<p className="font-semibold">Não foi possível carregar as configurações</p>
-					<p className="mt-1 text-xs text-tinta-suave">
+					<p className="mt-1 text-xs text-cor-fonte-secundaria">
 						{obterMensagemErro(erro ?? agenda.erroGrade)}
 					</p>
 				</div>
@@ -385,10 +385,10 @@ export function PaginaConfiguracoes() {
 			) : (
 				<>
 					{cadastrando && (
-						<div className="mb-6 flex items-start gap-3 rounded-2xl border border-marca-500/30 bg-marca-50 px-5 py-4 text-[13px] text-marca-700">
+						<div className="mb-6 flex items-start gap-3 rounded-2xl border border-cor-primaria/30 bg-cor-primaria-suave px-5 py-4 text-[13px] text-cor-primaria-escura">
 							<span
 								aria-hidden="true"
-								className="mt-1.5 size-2 shrink-0 rounded-full bg-marca-500"
+								className="mt-1.5 size-2 shrink-0 rounded-full bg-cor-primaria"
 							/>
 							<p>
 								Preencha os dados da empresa e o expediente abaixo para liberar os
@@ -466,11 +466,11 @@ export function PaginaConfiguracoes() {
 									{organizacao ? (
 										<CartaoBloqueios agenda={agenda} />
 									) : (
-										<div className="rounded-2xl border border-borda/80 bg-white p-6 shadow-[0_1px_2px_rgba(14,41,57,0.04)]">
-											<h3 className="text-base font-semibold text-tinta">
+										<div className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-6 shadow-sutil">
+											<h3 className="text-base font-semibold text-cor-fonte-primaria">
 												Bloqueios pontuais da agenda
 											</h3>
-											<p className="mt-2 text-xs leading-5 text-tinta-suave">
+											<p className="mt-2 text-xs leading-5 text-cor-fonte-secundaria">
 												Os bloqueios para feriados, férias e manutenções são configurados
 												após o primeiro cadastro da empresa. Finalize o preenchimento dos
 												dados nas abas de Empresa e Atendimento para liberar esta área.
@@ -478,7 +478,7 @@ export function PaginaConfiguracoes() {
 											<button
 												type="button"
 												onClick={() => mudarAba('empresa')}
-												className="mt-4 h-10 rounded-lg bg-marca-50 px-4 text-xs font-semibold text-marca-700 transition-colors hover:bg-marca-500/20 [touch-action:manipulation]"
+												className="mt-4 h-10 rounded-lg bg-cor-primaria-suave px-4 text-xs font-semibold text-cor-primaria-escura transition-colors hover:bg-cor-primaria/20 [touch-action:manipulation]"
 											>
 												Ir para dados da empresa
 											</button>
@@ -495,7 +495,7 @@ export function PaginaConfiguracoes() {
 								type="button"
 								onClick={descartarAlteracoes}
 								disabled={salvando}
-								className="h-11 rounded-lg border border-borda bg-white px-4 text-xs font-medium text-tinta-suave transition-colors hover:text-tinta"
+								className="h-11 rounded-lg border border-cor-borda bg-cor-superficie px-4 text-xs font-medium text-cor-fonte-secundaria transition-colors hover:text-cor-fonte-primaria"
 							>
 								Descartar
 							</button>
