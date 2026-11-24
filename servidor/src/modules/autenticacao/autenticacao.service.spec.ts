@@ -100,13 +100,13 @@ describe('serviço de autenticação', () => {
 		).rejects.toBeInstanceOf(ForbiddenException);
 	});
 
-	it('cria sessão para credenciais válidas sem retornar o hash da senha', async () => {
+	it('cria sessão para credenciais válidas sem retornar o hash da senha (incluindo estudante.ifto.edu.br)', async () => {
 		selecionar.mockReturnValue(
 			criarConsulta([
 				{
 					id: 1,
 					nome: 'Pessoa Cliente',
-					email: 'pessoa@example.com',
+					email: 'pessoa@estudante.ifto.edu.br',
 					senhaHash: 'hash',
 					telefone: '11999999999',
 					role: 'cliente',
@@ -117,14 +117,14 @@ describe('serviço de autenticação', () => {
 		jest.spyOn(bcrypt, 'compare').mockImplementation(() => Promise.resolve(true));
 
 		const sessao = await servico.entrar({
-			email: 'pessoa@example.com',
+			email: 'pessoa@estudante.ifto.edu.br',
 			senha: 'senha-segura',
 		});
 
 		expect(sessao.usuario).toEqual({
 			id: 1,
 			nome: 'Pessoa Cliente',
-			email: 'pessoa@example.com',
+			email: 'pessoa@estudante.ifto.edu.br',
 			telefone: '11999999999',
 			role: 'cliente',
 		});

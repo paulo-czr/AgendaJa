@@ -71,6 +71,7 @@ export function PaginaRecuperarSenha() {
 						id="email"
 						rotulo="E-mail cadastrado"
 						type="email"
+						placeholder="exemplo@estudante.ifto.edu.br"
 						autoComplete="email"
 						value={email}
 						onChange={(evento) => definirEmail(evento.target.value)}

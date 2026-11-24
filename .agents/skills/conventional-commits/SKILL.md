@@ -1,6 +1,6 @@
 ---
 name: conventional-commits
-description: Analisa os arquivos modificados, adicionados ou removidos na árvore de alterações do Git (git status e git diff), agrupa mudanças logicamente e realiza commits seguindo o padrão Conventional Commits em português com aprovação obrigatória do usuário antes de cada commit. Use sempre que o usuário pedir para commitar, criar commits, organizar alterações no Git, subir mudanças ou preparar mensagens de commit.
+description: Analisa os arquivos modificados, adicionados ou removidos na árvore de alterações do Git (git status e git diff), agrupa mudanças em módulos e realiza commits seguindo o padrão Conventional Commits em português com aprovação obrigatória do usuário antes de cada commit. Use sempre que o usuário pedir para commitar, criar commits, organizar alterações no Git, subir mudanças ou preparar mensagens de commit.
 ---
 
 # Conventional Commits com Aprovação Interativa
@@ -33,9 +33,9 @@ tipo(modulo): Descrição com inicial maiúscula e primeiro verbo no infinitivo
    - Se a alteração for global no repositório, utilize um escopo geral coerente (ex.: `config`, `deps`, `geral`).
 3. **Descrição (após `: `):**
    - Deve começar **obrigatoriamente com letra maiúscula**.
-   - O primeiro verbo deve estar **obrigatoriamente no infinitivo** (ex.: *Implementar*, *Corrigir*, *Adicionar*, *Remover*, *Atualizar*, *Refatorar*, *Ajustar*, *Configurar*).
+   - O primeiro verbo deve estar **obrigatoriamente no infinitivo** (ex.: _Implementar_, _Corrigir_, _Adicionar_, _Remover_, _Atualizar_, _Refatorar_, _Ajustar_, _Configurar_).
    - Não terminar a linha de título com ponto final.
-   - Se necessário, adicione um corpo opcional separado por uma linha em branco explicando o *porquê* da alteração.
+   - Se necessário, adicione um corpo opcional separado por uma linha em branco explicando o _porquê_ da alteração.
 
 ### Exemplos Válidos
 
@@ -46,9 +46,9 @@ tipo(modulo): Descrição com inicial maiúscula e primeiro verbo no infinitivo
 
 ### Exemplos Inválidos (PROIBIDO)
 
-- `feat(autenticacao): implementando o módulo de autenticação` *(verbo no gerúndio e inicial minúscula)*
-- `feat(autenticacao): implementou o módulo de autenticação` *(verbo no passado)*
-- `Feat(autenticacao): Implementar módulo.` *(tipo com inicial maiúscula e ponto final)*
+- `feat(autenticacao): implementando o módulo de autenticação` _(verbo no gerúndio e inicial minúscula)_
+- `feat(autenticacao): implementou o módulo de autenticação` _(verbo no passado)_
+- `Feat(autenticacao): Implementar módulo.` _(tipo com inicial maiúscula e ponto final)_
 
 ## Fluxo de Execução (Passo a Passo)
 
@@ -72,7 +72,7 @@ Para **cada** grupo de alterações planejado, siga rigorosamente esta sequênci
    - **Arquivos que serão incluídos** (`git add` específico desses arquivos).
    - **Mensagem de commit proposta** formatada em bloco de código.
    - **Breve resumo** do que está sendo alterado nesse pacote.
-2. **Pergunte explicitamente:** *"Você aprova este commit? (Sim / Não / Ajustar mensagem)"*
+2. **Pergunte explicitamente:** _"Você aprova este commit? (Sim / Não / Ajustar mensagem)"_
 3. **Pare e aguarde a resposta do usuário.**
    - **Se o usuário aprovar:** Execute `git add <arquivos-do-grupo>` e `git commit -m "<mensagem-aprovada>"`. Em seguida, avance para o próximo commit da fila.
    - **Se o usuário pedir ajuste na mensagem ou nos arquivos:** Refaça a proposta conforme solicitado e peça confirmação novamente.

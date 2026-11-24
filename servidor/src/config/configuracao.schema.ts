@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+const REGEX_REMETENTE_EMAIL =
+	/^(?:[^<>]+<[^<>]+@[^<>]+>|[^@\s]+@[^@\s]+\.[^@\s]+)$/;
+
 export const configuracaoAmbienteSchema = z
 	.object({
 		DATABASE_URL: z
@@ -17,13 +20,19 @@ export const configuracaoAmbienteSchema = z
 		JWT_EXPIRACAO: z.literal('15m'),
 		JWT_REFRESH_SEGREDO: z.string().min(32),
 		JWT_REFRESH_EXPIRACAO: z.literal('7d'),
-		RESEND_API_KEY: z.string().min(1),
-		RESEND_REMETENTE: z
+		SMTP_HOST: z.string().trim().min(1),
+		SMTP_PORTA: z.coerce.number().int().positive().default(587),
+		SMTP_SEGURO: z
+			.enum(['true', 'false'])
+			.default('false')
+			.transform((valor) => valor === 'true'),
+		SMTP_USUARIO: z.string().trim().min(1),
+		SMTP_SENHA: z.string().min(1),
+		SMTP_REMETENTE: z
 			.string()
 			.refine(
-				(valor) =>
-					/^(?:[^<>]+<[^<>]+@[^<>]+>|[^@\s]+@[^@\s]+\.[^@\s]+)$/.test(valor),
-				'RESEND_REMETENTE precisa ser um e-mail ou nome seguido de um e-mail.',
+				(valor) => REGEX_REMETENTE_EMAIL.test(valor),
+				'SMTP_REMETENTE precisa ser um e-mail ou nome seguido de um e-mail.',
 			),
 	})
 	.passthrough();

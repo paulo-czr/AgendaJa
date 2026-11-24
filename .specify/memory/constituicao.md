@@ -41,7 +41,7 @@
 ## Artigo IV — Contratos, Validação, Persistência e E-mail
 4.1. **Validação com Zod (`nestjs-zod`):** Todos os payloads de entrada (Body, Query, Params) e contratos de resposta no `servidor` devem ser validados via schemas **Zod** integrados ao NestJS através do `nestjs-zod`.
 4.2. **Persistência com Drizzle ORM (Supabase):** Toda alteração estrutural no PostgreSQL deve ser declarada nos schemas do Drizzle (`servidor/src/database/schemas/`) e versionada via migrations geradas pelo `drizzle-kit` em `servidor/drizzle/`.
-4.3. **Disparo de E-mails (Resend):** Todos os e-mails transacionais (verificação de conta e recuperação de senha) devem utilizar o SDK oficial do **Resend** configurado via variável de ambiente `RESEND_API_KEY`.
+4.3. **Disparo de E-mails (Nodemailer):** Todos os e-mails transacionais (verificação de conta e recuperação de senha) devem utilizar o **Nodemailer** via SMTP configurado por variáveis de ambiente (`SMTP_HOST`, `SMTP_PORTA`, `SMTP_SEGURO`, `SMTP_USUARIO`, `SMTP_SENHA` e `SMTP_REMETENTE`).
 
 ---
 

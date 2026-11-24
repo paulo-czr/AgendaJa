@@ -43,6 +43,7 @@ export function PaginaCadastro() {
 					id="email"
 					rotulo="E-mail"
 					type="email"
+					placeholder="exemplo@estudante.ifto.edu.br"
 					autoComplete="email"
 					value={email}
 					onChange={(evento) => definirEmail(evento.target.value)}

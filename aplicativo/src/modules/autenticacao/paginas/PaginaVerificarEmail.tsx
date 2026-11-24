@@ -60,6 +60,7 @@ export function PaginaVerificarEmail() {
 					id="email-reenvio"
 					rotulo="E-mail cadastrado"
 					type="email"
+					placeholder="exemplo@estudante.ifto.edu.br"
 					autoComplete="email"
 					value={email}
 					onChange={(evento) => definirEmail(evento.target.value)}
