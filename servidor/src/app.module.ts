@@ -6,6 +6,7 @@ import { BancoDadosModule } from './database/banco-dados.module';
 import { AutenticacaoModule } from './modules/autenticacao/autenticacao.module';
 import { ConfiguracoesAgendaModule } from './modules/configuracoes-agenda/configuracoes-agenda.module';
 import { OrganizacoesModule } from './modules/organizacoes/organizacoes.module';
+import { ServicosModule } from './modules/servicos/servicos.module';
 
 @Module({
 	imports: [
@@ -18,6 +19,7 @@ import { OrganizacoesModule } from './modules/organizacoes/organizacoes.module';
 		AutenticacaoModule,
 		OrganizacoesModule,
 		ConfiguracoesAgendaModule,
+		ServicosModule,
 	],
 })
 export class AppModule {}
