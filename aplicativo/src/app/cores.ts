@@ -1,6 +1,6 @@
 /**
  * Identidade Visual do AgendaJá — Tokens e Constantes Globais de Cor
- * 
+ *
  * Nomes descritivos organizados por hierarquia:
  * - primaria: Ações principais, destaques da marca e estados ativos.
  * - secundaria: Estrutura escura (sidebar, cabeçalho e superfícies escuras).

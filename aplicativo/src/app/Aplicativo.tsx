@@ -1,4 +1,11 @@
-import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom';
+import {
+	BrowserRouter,
+	Link,
+	Route,
+	Routes,
+	useNavigate,
+} from 'react-router-dom';
+import { Botao } from '../components/Botao';
 import { LayoutPainel } from '../components/LayoutPainel';
 import { ProvedorNotificacoes } from '../lib/notificacoes';
 import { ProvedorAplicativo } from './ProvedorAplicativo';
@@ -11,6 +18,8 @@ import { PaginaVerificarEmail } from '../modules/autenticacao/paginas/PaginaVeri
 import { ExigirOrganizacao } from '../modules/organizacoes/componentes/ExigirOrganizacao';
 import { usarOrganizacao } from '../modules/organizacoes/hooks/usarOrganizacao';
 import { PaginaConfiguracoes } from '../modules/organizacoes/paginas/PaginaConfiguracoes';
+import { PaginaServicos } from '../modules/servicos/paginas/PaginaServicos';
+import { PaginaVitrinePublica } from '../modules/vitrine/paginas/PaginaVitrinePublica';
 import { PaginaNaoEncontrada } from './PaginaNaoEncontrada';
 
 function PaginaInicial() {
@@ -77,13 +86,14 @@ function PaginaInicial() {
 					<Link className="font-bold text-marca-700" to="/">
 						AgendaJá
 					</Link>
-					<button
-						className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+					<Botao
+						variante="outline"
+						tamanho="pequeno"
 						onClick={encerrarSessao}
 						disabled={sair.isPending}
 					>
 						Sair
-					</button>
+					</Botao>
 				</div>
 			</header>
 			<section className="mx-auto max-w-6xl px-6 py-16">
@@ -130,6 +140,17 @@ function RotasAplicativo() {
 					</RotaProtegida>
 				}
 			/>
+			<Route
+				path="/servicos"
+				element={
+					<RotaProtegida papeis={['prestador']}>
+						<ExigirOrganizacao>
+							<PaginaServicos />
+						</ExigirOrganizacao>
+					</RotaProtegida>
+				}
+			/>
+			<Route path="/vitrine/:idOrganizacao" element={<PaginaVitrinePublica />} />
 			<Route path="/404" element={<PaginaNaoEncontrada />} />
 			<Route path="*" element={<PaginaNaoEncontrada />} />
 		</Routes>

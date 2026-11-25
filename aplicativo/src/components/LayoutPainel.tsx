@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { icones } from '../assets/icones';
+import { Botao } from './Botao';
 import { IconeMenu, type NomeIconeMenu } from './IconeMenu';
 import { Logo } from './Logo';
 
@@ -14,11 +15,41 @@ interface ItemNavegacao {
 }
 
 const ITENS_NAVEGACAO: ItemNavegacao[] = [
-	{ nome: 'inicio', rotulo: 'Início', rotuloCurto: 'Início', iconeMobile: icones.arredondado.inicio, rota: '/' },
-	{ nome: 'agendamentos', rotulo: 'Agendamentos', rotuloCurto: 'Agenda', iconeMobile: icones.arredondado.calendario, rota: null },
-	{ nome: 'clientes', rotulo: 'Clientes', rotuloCurto: 'Clientes', iconeMobile: icones.arredondado.clientes, rota: null },
-	{ nome: 'servicos', rotulo: 'Serviços', rotuloCurto: 'Serviços', iconeMobile: icones.arredondado.servicos, rota: null },
-	{ nome: 'configuracoes', rotulo: 'Configurações', rotuloCurto: 'Ajustes', iconeMobile: icones.arredondado.configuracoes, rota: '/configuracoes' },
+	{
+		nome: 'inicio',
+		rotulo: 'Início',
+		rotuloCurto: 'Início',
+		iconeMobile: icones.arredondado.inicio,
+		rota: '/',
+	},
+	{
+		nome: 'agendamentos',
+		rotulo: 'Agendamentos',
+		rotuloCurto: 'Agenda',
+		iconeMobile: icones.arredondado.calendario,
+		rota: null,
+	},
+	{
+		nome: 'clientes',
+		rotulo: 'Clientes',
+		rotuloCurto: 'Clientes',
+		iconeMobile: icones.arredondado.clientes,
+		rota: null,
+	},
+	{
+		nome: 'servicos',
+		rotulo: 'Serviços',
+		rotuloCurto: 'Serviços',
+		iconeMobile: icones.arredondado.servicos,
+		rota: '/servicos',
+	},
+	{
+		nome: 'configuracoes',
+		rotulo: 'Configurações',
+		rotuloCurto: 'Ajustes',
+		iconeMobile: icones.arredondado.configuracoes,
+		rota: '/configuracoes',
+	},
 ];
 
 interface PropriedadesLayoutPainel {
@@ -81,7 +112,9 @@ export function LayoutPainel({
 						const ativo = item.nome === itemAtivo;
 						const conteudo = (
 							<>
-								<span className={`grid size-5 place-items-center ${ativo ? '' : 'text-cor-fonte-invertida-media'}`}>
+								<span
+									className={`grid size-5 place-items-center ${ativo ? '' : 'text-cor-fonte-invertida-media'}`}
+								>
 									<IconeMenu nome={item.nome} ativo={ativo} />
 								</span>
 								<span className="flex-1">{item.rotulo}</span>
@@ -100,7 +133,11 @@ export function LayoutPainel({
 
 						if (!item.rota) {
 							return (
-								<span key={item.nome} className={`${classes} cursor-not-allowed opacity-60`} aria-disabled="true">
+								<span
+									key={item.nome}
+									className={`${classes} cursor-not-allowed opacity-60`}
+									aria-disabled="true"
+								>
 									{conteudo}
 								</span>
 							);
@@ -121,14 +158,22 @@ export function LayoutPainel({
 
 				<div className="mt-auto px-2">
 					<div className="mb-6 h-px bg-cor-secundaria-borda" />
-					<p className="text-[13px] font-medium text-cor-fonte-invertida">Agenda simples.</p>
-					<p className="mt-1 text-[11px] text-cor-fonte-invertida-mutada">Seu tempo bem cuidado.</p>
+					<p className="text-[13px] font-medium text-cor-fonte-invertida">
+						Agenda simples.
+					</p>
+					<p className="mt-1 text-[11px] text-cor-fonte-invertida-mutada">
+						Seu tempo bem cuidado.
+					</p>
 				</div>
 			</aside>
 
 			{/* Cabeçalho (mobile) */}
 			<header className="sticky top-0 z-20 flex h-24 items-center justify-between bg-cor-secundaria px-5 lg:hidden">
-				<Link to="/" aria-label="AgendaJá — página inicial" className="flex items-center gap-2.5">
+				<Link
+					to="/"
+					aria-label="AgendaJá — página inicial"
+					className="flex items-center gap-2.5"
+				>
 					<span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-cor-primaria">
 						<img src={icones.marcaCalendario} alt="" width={18} height={18} />
 					</span>
@@ -169,14 +214,14 @@ export function LayoutPainel({
 								<IconeMenu nome="configuracoes" />
 							</Link>
 							<span className="h-[30px] w-px bg-cor-borda" />
-							<button
-								type="button"
+							<Botao
+								variante="ghost"
+								tamanho="pequeno"
 								onClick={aoSair}
 								disabled={saindo}
-								className="rounded-lg px-3 py-2 text-[13px] font-medium text-cor-fonte-secundaria transition hover:bg-cor-superficie hover:text-cor-fonte-primaria disabled:opacity-60"
 							>
 								Sair
-							</button>
+							</Botao>
 						</div>
 					</header>
 
@@ -185,7 +230,9 @@ export function LayoutPainel({
 							<h1 className="text-[27px] font-bold leading-tight text-cor-fonte-primaria lg:text-[30px]">
 								{titulo}
 							</h1>
-							<p className="mt-2 text-[13px] text-cor-fonte-secundaria lg:mt-3 lg:text-sm">{descricao}</p>
+							<p className="mt-2 text-[13px] text-cor-fonte-secundaria lg:mt-3 lg:text-sm">
+								{descricao}
+							</p>
 						</div>
 						{acao}
 					</div>
@@ -203,10 +250,14 @@ export function LayoutPainel({
 					const ativo = item.nome === itemAtivo;
 					const conteudo = (
 						<>
-							<span className={`grid h-[30px] w-14 place-items-center rounded-full ${ativo ? 'bg-cor-primaria-suave' : ''}`}>
+							<span
+								className={`grid h-[30px] w-14 place-items-center rounded-full ${ativo ? 'bg-cor-primaria-suave' : ''}`}
+							>
 								<img src={item.iconeMobile} alt="" width={20} height={20} />
 							</span>
-							<span className={`mt-1 text-[10px] ${ativo ? 'font-semibold text-cor-primaria-escura' : 'font-medium text-cor-fonte-secundaria'}`}>
+							<span
+								className={`mt-1 text-[10px] ${ativo ? 'font-semibold text-cor-primaria-escura' : 'font-medium text-cor-fonte-secundaria'}`}
+							>
 								{item.rotuloCurto}
 							</span>
 						</>

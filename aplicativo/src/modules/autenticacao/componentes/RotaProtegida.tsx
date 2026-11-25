@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { Botao } from '../../../components/Botao';
 import { usarAutenticacao } from '../hooks/usarAutenticacao';
 import type { PapelUsuario } from '../servicos/autenticacaoServico';
 
@@ -31,12 +32,13 @@ export function RotaProtegida({
 						Não foi possível verificar sua sessão. Confira sua conexão e tente
 						novamente.
 					</p>
-					<button
-						className="mt-5 rounded-xl bg-marca-600 px-4 py-2 text-sm font-semibold text-white hover:bg-marca-700"
+					<Botao
+						variante="primario"
 						onClick={() => window.location.reload()}
+						className="mt-5"
 					>
 						Tentar novamente
-					</button>
+					</Botao>
 				</section>
 			</main>
 		);
