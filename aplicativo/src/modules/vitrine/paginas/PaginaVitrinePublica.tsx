@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, Clock, MapPin, Phone } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Logo } from '../../../components/Logo';
+import BlurText from '../../../components/reactbits/BlurText';
+import SpotlightCard from '../../../components/reactbits/SpotlightCard';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { DIAS_SEMANA } from '../../organizacoes/formulario';
 import {
@@ -108,7 +110,13 @@ export function PaginaVitrinePublica() {
 								Catálogo de serviços
 							</p>
 							<h1 className="mt-1.5 text-2xl font-semibold tracking-tight sm:text-3xl">
-								{organizacao.nomeFantasia}
+								<BlurText
+									text={organizacao.nomeFantasia}
+									delay={80}
+									animateBy="words"
+									direction="top"
+									trigger="load"
+								/>
 							</h1>
 						</div>
 
@@ -242,36 +250,43 @@ export function PaginaVitrinePublica() {
 				</div>
 
 				{horariosAtivos.length > 0 && (
-					<aside className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-5 shadow-sutil lg:sticky lg:top-6">
-						<h2 className="text-sm font-semibold text-cor-fonte-primaria">
-							Horários de atendimento
-						</h2>
-						<ul className="mt-4 divide-y divide-cor-borda/60 text-xs">
-							{DIAS_SEMANA.map((dia) => {
-								const config = horariosAtivos.find(
-									(item) => item.diaSemana === dia.numero,
-								);
+					<SpotlightCard
+						theme="light"
+						spotlightColor="rgb(32 201 174)"
+						intensity={0.18}
+						className="!rounded-2xl border border-cor-borda/80 !p-5 !shadow-sutil lg:sticky lg:top-6"
+					>
+						<aside>
+							<h2 className="text-sm font-semibold text-cor-fonte-primaria">
+								Horários de atendimento
+							</h2>
+							<ul className="mt-4 divide-y divide-cor-borda/60 text-xs">
+								{DIAS_SEMANA.map((dia) => {
+									const config = horariosAtivos.find(
+										(item) => item.diaSemana === dia.numero,
+									);
 
-								return (
-									<li
-										key={dia.numero}
-										className="flex items-center justify-between py-2"
-									>
-										<span className="font-medium text-cor-fonte-primaria">
-											{dia.nome}
-										</span>
-										{config ? (
-											<span className="text-cor-fonte-secundaria tabular-nums">
-												{config.horarioAbertura} – {config.horarioFechamento}
+									return (
+										<li
+											key={dia.numero}
+											className="flex items-center justify-between py-2"
+										>
+											<span className="font-medium text-cor-fonte-primaria">
+												{dia.nome}
 											</span>
-										) : (
-											<span className="text-cor-fonte-secundaria/70">Fechado</span>
-										)}
-									</li>
-								);
-							})}
-						</ul>
-					</aside>
+											{config ? (
+												<span className="text-cor-fonte-secundaria tabular-nums">
+													{config.horarioAbertura} – {config.horarioFechamento}
+												</span>
+											) : (
+												<span className="text-cor-fonte-secundaria/70">Fechado</span>
+											)}
+										</li>
+									);
+								})}
+							</ul>
+						</aside>
+					</SpotlightCard>
 				)}
 			</main>
 		</div>
