@@ -2,13 +2,12 @@ import {
 	pgTable,
 	serial,
 	varchar,
-	text,
 	integer,
-	numeric,
 	boolean,
 	timestamp,
 } from 'drizzle-orm/pg-core';
 import type { InferSelectModel, InferInsertModel } from 'drizzle-orm';
+import { categoriasServicos } from './categorias-servicos.schema';
 import { organizacoes } from './organizacoes.schema';
 
 /**
@@ -19,9 +18,12 @@ export const servicos = pgTable('servicos', {
 	idOrganizacao: integer('id_organizacao')
 		.notNull()
 		.references(() => organizacoes.id, { onDelete: 'cascade' }),
-	nomeServico: varchar('nome_servico', { length: 255 }).notNull(),
-	descricaoServico: text('descricao_servico'),
-	preco: numeric('preco', { precision: 10, scale: 2 }).notNull(),
+	idCategoria: integer('id_categoria').references(() => categoriasServicos.id, {
+		onDelete: 'set null',
+	}),
+	nomeServico: varchar('nome_servico', { length: 120 }).notNull(),
+	descricaoServico: varchar('descricao_servico', { length: 500 }),
+	precoCentavos: integer('preco_centavos').notNull(),
 	duracaoMinutos: integer('duracao_minutos').notNull(),
 	ativo: boolean('ativo').default(true).notNull(),
 	criadoEm: timestamp('criado_em', { withTimezone: true })
@@ -30,6 +32,7 @@ export const servicos = pgTable('servicos', {
 	atualizadoEm: timestamp('atualizado_em', { withTimezone: true })
 		.defaultNow()
 		.notNull(),
+	desativadoEm: timestamp('desativado_em', { withTimezone: true }),
 });
 
 export type Servico = InferSelectModel<typeof servicos>;

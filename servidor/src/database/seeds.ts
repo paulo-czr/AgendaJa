@@ -13,8 +13,7 @@ dotenv.config();
  * agendamento e relatório técnico.
  */
 async function semear() {
-	const connectionString =
-		process.env.DATABASE_URL;
+	const connectionString = process.env.DATABASE_URL;
 
 	if (!connectionString) {
 		throw new Error('A variável DATABASE_URL precisa estar configurada.');
@@ -58,7 +57,7 @@ async function semear() {
 			.insert(schema.organizacoes)
 			.values({
 				idUsuario: prestador.id,
-				nomeFantasia: 'Estética Automotiva Brilho Já',
+				nomeFantasia: 'Serviços Gerais Modelo',
 				documento: '12345678000199',
 				endereco: 'Av. Paulista, 1000 - Bela Vista, São Paulo - SP',
 				capacidadeSimultanea: 2, // Suporta até 2 atendimentos simultâneos (Artigo 5.2)
@@ -80,33 +79,44 @@ async function semear() {
 
 		console.log('Configurações de agenda semanal criadas (Segunda a Sábado).');
 
-		const [servicoLavagem] = await db
+		const [categoriaPadrao] = await db
+			.insert(schema.categoriasServicos)
+			.values({
+				idOrganizacao: organizacao.id,
+				nome: 'Manutenção Preventiva',
+			})
+			.returning();
+
+		const [servicoPreventivo] = await db
 			.insert(schema.servicos)
 			.values({
 				idOrganizacao: organizacao.id,
-				nomeServico: 'Lavagem Completa com Cera',
+				idCategoria: categoriaPadrao.id,
+				nomeServico: 'Manutenção Preventiva',
 				descricaoServico:
-					'Higienização interna, lavagem de pintura e aplicação de cera protetora.',
-				preco: '80.00',
+					'Verificação geral, inspeção de rotina e ajustes preventivos.',
+				precoCentavos: 8000,
 				duracaoMinutos: 60,
 				ativo: true,
 			})
 			.returning();
 
-		const [servicoPolimento] = await db
+		const [servicoEspecializado] = await db
 			.insert(schema.servicos)
 			.values({
 				idOrganizacao: organizacao.id,
-				nomeServico: 'Polimento Técnico',
-				descricaoServico: 'Remoção de riscos superficiais e restauração de brilho.',
-				preco: '250.00',
+				idCategoria: categoriaPadrao.id,
+				nomeServico: 'Atendimento Técnico Especializado',
+				descricaoServico:
+					'Diagnóstico detalhado e execução de serviço técnico sob medida.',
+				precoCentavos: 25000,
 				duracaoMinutos: 180,
 				ativo: true,
 			})
 			.returning();
 
 		console.log(
-			`Serviços cadastrados: ${servicoLavagem.nomeServico}, ${servicoPolimento.nomeServico}`,
+			`Serviços cadastrados: ${servicoPreventivo.nomeServico}, ${servicoEspecializado.nomeServico}`,
 		);
 
 		const agora = new Date();
@@ -119,11 +129,11 @@ async function semear() {
 			.insert(schema.agendamentos)
 			.values({
 				idCliente: cliente.id,
-				idServico: servicoLavagem.id,
+				idServico: servicoPreventivo.id,
 				dataHoraInicio: inicioAgendamento,
 				dataHoraFim: fimAgendamento,
 				status: 'confirmado',
-				observacoes: 'Carro sedan preto, placa ABC-1234',
+				observacoes: 'Solicitação de revisão agendada pelo cliente.',
 			})
 			.returning();
 
@@ -133,13 +143,13 @@ async function semear() {
 
 		await db.insert(schema.relatorios).values({
 			idCliente: cliente.id,
-			idServico: servicoLavagem.id,
+			idServico: servicoPreventivo.id,
 			idUsuario: prestador.id,
 			idAgendamento: agendamento.id,
 			nomePrestador: prestador.nome,
-			observacao: 'Veículo em ótimo estado de conservação.',
+			observacao: 'Atendimento realizado dentro do prazo previsto.',
 			descricaoRelatorio:
-				'Serviço executado com sucesso: lavagem de lataria, aspiração interna e cera líquida.',
+				'Serviço executado com sucesso: inspeção completa e ajustes preventivos concluídos.',
 		});
 
 		console.log('Relatório pós-atendimento de exemplo criado.');
