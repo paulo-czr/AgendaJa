@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Check, Pencil, Plus, Tag, Trash2, X } from 'lucide-react';
 import { Botao } from '../../../components/Botao';
+import CountUp from '../../../components/reactbits/CountUp';
 import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { usarCategorias } from '../../servicos/hooks/usarCategorias';
@@ -75,7 +76,8 @@ export function AbaCategorias() {
 			acaoCabecalho={
 				categorias.length > 0 ? (
 					<span className="rounded-lg bg-cor-fundo px-2.5 py-1 text-xs font-medium text-cor-fonte-secundaria tabular-nums">
-						{categorias.length} {categorias.length === 1 ? 'categoria' : 'categorias'}
+						<CountUp to={categorias.length} duration={0.4} trigger="load" />{' '}
+						{categorias.length === 1 ? 'categoria' : 'categorias'}
 					</span>
 				) : undefined
 			}
