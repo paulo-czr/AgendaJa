@@ -15,6 +15,20 @@
       "when": 1795482335188,
       "tag": "0001_organizacoes_configuracoes",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795605850384,
+      "tag": "0002_shocking_infant_terrible",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795606829110,
+      "tag": "0003_categorias_servicos",
+      "breakpoints": true
     }
   ]
 }

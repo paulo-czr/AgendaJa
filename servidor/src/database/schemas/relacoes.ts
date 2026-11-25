@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { usuarios } from './usuarios.schema';
 import { organizacoes } from './organizacoes.schema';
+import { categoriasServicos } from './categorias-servicos.schema';
 import { servicos } from './servicos.schema';
 import { agendamentos } from './agendamentos.schema';
 import {
@@ -32,18 +33,37 @@ export const organizacoesRelations = relations(
 			references: [usuarios.id],
 		}),
 		servicos: many(servicos),
+		categoriasServicos: many(categoriasServicos),
 		configuracoesAgenda: many(configuracoesAgenda),
 		bloqueiosAgenda: many(bloqueiosAgenda),
 	}),
 );
 
 /**
- * Relações de serviços com a organização provedora, agendamentos e relatórios associados.
+ * Relações de categorias de serviços com a organização proprietária e os serviços vinculados.
+ */
+export const categoriasServicosRelations = relations(
+	categoriasServicos,
+	({ one, many }) => ({
+		organizacao: one(organizacoes, {
+			fields: [categoriasServicos.idOrganizacao],
+			references: [organizacoes.id],
+		}),
+		servicos: many(servicos),
+	}),
+);
+
+/**
+ * Relações de serviços com a organização provedora, categoria, agendamentos e relatórios associados.
  */
 export const servicosRelations = relations(servicos, ({ one, many }) => ({
 	organizacao: one(organizacoes, {
 		fields: [servicos.idOrganizacao],
 		references: [organizacoes.id],
+	}),
+	categoria: one(categoriasServicos, {
+		fields: [servicos.idCategoria],
+		references: [categoriasServicos.id],
 	}),
 	agendamentos: many(agendamentos),
 	relatorios: many(relatorios),
