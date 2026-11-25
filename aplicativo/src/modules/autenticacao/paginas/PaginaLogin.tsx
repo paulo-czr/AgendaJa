@@ -25,7 +25,15 @@ export function PaginaLogin() {
 		evento.preventDefault();
 		autenticacao.entrar.mutate(
 			{ email, senha },
-			{ onSuccess: () => navegar(destino, { replace: true }) },
+			{
+				onSuccess: (usuarioLogado) => {
+					const rotaDestino =
+						destino === '/' && usuarioLogado.role === 'prestador'
+							? '/empresa'
+							: destino;
+					navegar(rotaDestino, { replace: true });
+				},
+			},
 		);
 	}
 
