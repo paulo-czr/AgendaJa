@@ -407,7 +407,11 @@ export function calcularResumoExpediente(
 	};
 }
 
-export type AbaConfiguracoes = 'empresa' | 'atendimento' | 'bloqueios';
+export type AbaConfiguracoes =
+	| 'empresa'
+	| 'atendimento'
+	| 'bloqueios'
+	| 'categorias';
 
 /** Determina qual aba da tela de configurações contém determinado campo. */
 export function obterAbaDoCampo(
