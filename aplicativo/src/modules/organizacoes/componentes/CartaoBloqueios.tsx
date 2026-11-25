@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { icones } from '../../../assets/icones';
+import { Botao } from '../../../components/Botao';
 import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { usarConfiguracoesAgenda } from '../hooks/usarConfiguracoesAgenda';
 import { CampoConfiguracao, CartaoConfiguracao } from './CartaoConfiguracao';
+import { Plus } from 'lucide-react';
 
 const formatoData = new Intl.DateTimeFormat('pt-BR', {
 	day: '2-digit',
@@ -159,22 +161,22 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 
 									{confirmando ? (
 										<div className="flex items-center gap-2">
-											<button
-												type="button"
+											<Botao
+												tamanho="pequeno"
+												variante="perigo"
 												onClick={() => confirmarRemocao(bloqueio.id)}
-												disabled={removerBloqueio.isPending}
-												className="h-8 rounded-md bg-cor-perigo px-3 text-xs font-semibold text-cor-fonte-invertida transition-colors hover:opacity-90 disabled:opacity-50 [touch-action:manipulation]"
+												carregando={removerBloqueio.isPending}
 											>
 												{removerBloqueio.isPending ? 'Removendo…' : 'Confirmar'}
-											</button>
-											<button
-												type="button"
+											</Botao>
+											<Botao
+												tamanho="pequeno"
+												variante="ghost"
 												onClick={() => definirIdConfirmandoRemocao(null)}
 												disabled={removerBloqueio.isPending}
-												className="h-8 rounded-md bg-cor-superficie px-2.5 text-xs font-medium text-cor-fonte-secundaria transition-colors hover:text-cor-fonte-primaria [touch-action:manipulation]"
 											>
 												Cancelar
-											</button>
+											</Botao>
 										</div>
 									) : (
 										<button
@@ -206,7 +208,9 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 			)}
 
 			<div className="mt-6 border-t border-cor-borda pt-6">
-				<p className="text-xs font-semibold text-cor-fonte-primaria">Programar novo bloqueio</p>
+				<p className="text-xs font-semibold text-cor-fonte-primaria">
+					Programar novo bloqueio
+				</p>
 				<div className="mt-3 grid gap-4 sm:grid-cols-2 sm:gap-6">
 					<CampoConfiguracao
 						id="bloqueio-inicio"
@@ -260,14 +264,16 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 						maxLength={255}
 						className="flex-1"
 					/>
-					<button
+					<Botao
 						type="submit"
 						form={ID_FORMULARIO_BLOQUEIO}
-						disabled={criarBloqueio.isPending}
-						className="h-11 shrink-0 rounded-lg border border-cor-primaria px-5 text-xs font-semibold text-cor-primaria-escura transition-colors hover:bg-cor-primaria-suave active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation]"
+						variante="primario"
+						iconeEsquerda={Plus}
+						carregando={criarBloqueio.isPending}
+						className="h-11 shrink-0 border-cor-primaria text-cor-primaria-escura hover:bg-cor-primaria-suave"
 					>
 						{criarBloqueio.isPending ? 'Adicionando…' : 'Adicionar bloqueio'}
-					</button>
+					</Botao>
 				</div>
 
 				{erro && (

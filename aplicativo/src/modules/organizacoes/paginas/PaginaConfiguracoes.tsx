@@ -7,12 +7,14 @@ import {
 } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Botao } from '../../../components/Botao';
 import { LayoutPainel } from '../../../components/LayoutPainel';
 import { NavegacaoAbas, type ItemAba } from '../../../components/NavegacaoAbas';
 import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { usarAutenticacao } from '../../autenticacao/hooks/usarAutenticacao';
 import { CartaoBloqueios } from '../componentes/CartaoBloqueios';
+import { AbaCategorias } from '../componentes/AbaCategorias';
 import {
 	CartaoDadosEmpresa,
 	CartaoDuracaoPadrao,
@@ -41,6 +43,7 @@ import {
 	usarConfiguracoesAgenda,
 } from '../hooks/usarConfiguracoesAgenda';
 import { usarOrganizacao } from '../hooks/usarOrganizacao';
+import { Save } from 'lucide-react';
 
 const ID_FORMULARIO = 'formulario-configuracoes';
 
@@ -64,14 +67,17 @@ function BotaoSalvarConfiguracoes({
 			: 'Salvar alterações';
 
 	return (
-		<button
+		<Botao
 			type="submit"
 			form={ID_FORMULARIO}
-			disabled={desabilitado || salvando}
-			className={`h-11 rounded-lg bg-cor-primaria px-6 text-[13px] font-semibold text-cor-secundaria transition-colors hover:bg-cor-primaria-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 [touch-action:manipulation] lg:w-[184px] lg:text-xs ${className}`}
+			variante="primario"
+			iconeEsquerda={Save}
+			carregando={salvando}
+			disabled={desabilitado}
+			className={`h-11 lg:w-[184px] lg:text-xs ${className}`}
 		>
 			{texto}
-		</button>
+		</Botao>
 	);
 }
 
@@ -124,7 +130,9 @@ export function PaginaConfiguracoes() {
 
 	const abaUrl = parametrosBusca.get('aba') as AbaConfiguracoes | null;
 	const abaAtiva: AbaConfiguracoes =
-		abaUrl === 'atendimento' || abaUrl === 'bloqueios' ? abaUrl : 'empresa';
+		abaUrl === 'atendimento' || abaUrl === 'bloqueios' || abaUrl === 'categorias'
+			? abaUrl
+			: 'empresa';
 
 	const mudarAba = useCallback(
 		(novaAba: AbaConfiguracoes) => {
@@ -324,19 +332,24 @@ export function PaginaConfiguracoes() {
 					</span>
 				) : undefined,
 		},
+		{
+			id: 'categorias',
+			rotulo: 'Categorias',
+			descricao: 'Grupos de serviços da vitrine',
+		},
 	];
 
 	const acaoCabecalho = (
 		<div className="flex w-full flex-wrap items-center justify-end gap-3 lg:mt-1.5 lg:w-auto">
 			{!cadastrando && possuiAlteracoes && (
-				<button
-					type="button"
+				<Botao
+					variante="outline"
 					onClick={descartarAlteracoes}
 					disabled={salvando}
-					className="h-11 rounded-lg border border-cor-borda bg-cor-superficie px-4 text-xs font-medium text-cor-fonte-secundaria transition-colors hover:text-cor-fonte-primaria disabled:opacity-50 [touch-action:manipulation]"
+					className="h-11"
 				>
 					Descartar
-				</button>
+				</Botao>
 			)}
 			<BotaoSalvarConfiguracoes
 				salvando={salvando}
@@ -366,7 +379,7 @@ export function PaginaConfiguracoes() {
 					organizacao?.endereco ||
 					(organizacao ? 'Endereço não informado' : 'Cadastro pendente'),
 			}}
-			acao={acaoCabecalho}
+			acao={abaAtiva === 'categorias' ? undefined : acaoCabecalho}
 			aoSair={encerrarSessao}
 			saindo={sair.isPending}
 		>
@@ -404,109 +417,143 @@ export function PaginaConfiguracoes() {
 							abaAtiva={abaAtiva}
 							aoMudarAba={mudarAba}
 							ariaLabel="Seções das configurações"
-							className="max-w-2xl"
+							className="max-w-3xl"
 						/>
 					</div>
 
-					<form
-						id={ID_FORMULARIO}
-						onSubmit={(evento) => void salvar(evento)}
-						noValidate
-					>
-						{/* Painel com transição fluida a cada troca de aba */}
+					{abaAtiva === 'categorias' ? (
 						<div
 							key={abaAtiva}
 							id={`painel-aba-${abaAtiva}`}
 							role="tabpanel"
 							aria-labelledby={`aba-${abaAtiva}`}
-							className="animar-painel-aba"
+							className="animar-painel-aba max-w-3xl"
 						>
-							{/* Seção 1: Empresa */}
-							{abaAtiva === 'empresa' && (
-								<div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start">
-									<CartaoDadosEmpresa
-										formulario={formulario}
-										alterar={alterar}
-										cadastrando={cadastrando}
-										erros={errosCampos}
-									/>
-									<CartaoIdentidadePublica formulario={formulario} />
-								</div>
-							)}
-
-							{/* Seção 2: Atendimentos e Horários */}
-							{abaAtiva === 'atendimento' && (
-								<div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start">
-									<div className="space-y-6">
-										<CartaoFuncionamento
-											formulario={formulario}
-											alterar={alterar}
-											erros={errosCampos}
-										/>
-										<CartaoPausa
-											formulario={formulario}
-											alterar={alterar}
-											erros={errosCampos}
-										/>
-										<CartaoDuracaoPadrao
-											formulario={formulario}
-											alterar={alterar}
-											erros={errosCampos}
-										/>
-									</div>
-									<div className="lg:sticky lg:top-8">
-										<CartaoSobreDisponibilidade formulario={formulario} />
-									</div>
-								</div>
-							)}
-
-							{/* Seção 3: Bloqueios */}
-							{abaAtiva === 'bloqueios' && (
-								<div className="max-w-3xl">
-									{organizacao ? (
-										<CartaoBloqueios agenda={agenda} />
-									) : (
-										<div className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-6 shadow-sutil">
-											<h3 className="text-base font-semibold text-cor-fonte-primaria">
-												Bloqueios pontuais da agenda
-											</h3>
-											<p className="mt-2 text-xs leading-5 text-cor-fonte-secundaria">
-												Os bloqueios para feriados, férias e manutenções são configurados
-												após o primeiro cadastro da empresa. Finalize o preenchimento dos
-												dados nas abas de Empresa e Atendimento para liberar esta área.
-											</p>
-											<button
-												type="button"
-												onClick={() => mudarAba('empresa')}
-												className="mt-4 h-10 rounded-lg bg-cor-primaria-suave px-4 text-xs font-semibold text-cor-primaria-escura transition-colors hover:bg-cor-primaria/20 [touch-action:manipulation]"
-											>
-												Ir para dados da empresa
-											</button>
-										</div>
-									)}
+							{organizacao ? (
+								<AbaCategorias />
+							) : (
+								<div className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-6 shadow-sutil">
+									<h3 className="text-base font-semibold text-cor-fonte-primaria">
+										Categorias de serviços
+									</h3>
+									<p className="mt-2 text-xs leading-5 text-cor-fonte-secundaria">
+										As categorias são configuradas após o primeiro cadastro da empresa.
+										Finalize os dados nas abas de Empresa e Atendimento para liberar esta
+										área.
+									</p>
+									<button
+										type="button"
+										onClick={() => mudarAba('empresa')}
+										className="mt-4 h-10 rounded-lg bg-cor-primaria-suave px-4 text-xs font-semibold text-cor-primaria-escura transition-colors hover:bg-cor-primaria/20 [touch-action:manipulation]"
+									>
+										Ir para dados da empresa
+									</button>
 								</div>
 							)}
 						</div>
-					</form>
-
-					<div className="mt-6 flex items-center gap-3 lg:hidden">
-						{!cadastrando && possuiAlteracoes && (
-							<button
-								type="button"
-								onClick={descartarAlteracoes}
-								disabled={salvando}
-								className="h-11 rounded-lg border border-cor-borda bg-cor-superficie px-4 text-xs font-medium text-cor-fonte-secundaria transition-colors hover:text-cor-fonte-primaria"
+					) : (
+						<>
+							<form
+								id={ID_FORMULARIO}
+								onSubmit={(evento) => void salvar(evento)}
+								noValidate
 							>
-								Descartar
-							</button>
-						)}
-						<BotaoSalvarConfiguracoes
-							salvando={salvando}
-							cadastrando={cadastrando}
-							desabilitado={!formulario}
-							className="flex-1"
-						/>
-					</div>
+								{/* Painel com transição fluida a cada troca de aba */}
+								<div
+									key={abaAtiva}
+									id={`painel-aba-${abaAtiva}`}
+									role="tabpanel"
+									aria-labelledby={`aba-${abaAtiva}`}
+									className="animar-painel-aba"
+								>
+									{/* Seção 1: Empresa */}
+									{abaAtiva === 'empresa' && (
+										<div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start">
+											<CartaoDadosEmpresa
+												formulario={formulario}
+												alterar={alterar}
+												cadastrando={cadastrando}
+												erros={errosCampos}
+											/>
+											<CartaoIdentidadePublica formulario={formulario} />
+										</div>
+									)}
+
+									{/* Seção 2: Atendimentos e Horários */}
+									{abaAtiva === 'atendimento' && (
+										<div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start">
+											<div className="space-y-6">
+												<CartaoFuncionamento
+													formulario={formulario}
+													alterar={alterar}
+													erros={errosCampos}
+												/>
+												<CartaoPausa
+													formulario={formulario}
+													alterar={alterar}
+													erros={errosCampos}
+												/>
+												<CartaoDuracaoPadrao
+													formulario={formulario}
+													alterar={alterar}
+													erros={errosCampos}
+												/>
+											</div>
+											<div className="lg:sticky lg:top-8">
+												<CartaoSobreDisponibilidade formulario={formulario} />
+											</div>
+										</div>
+									)}
+
+									{/* Seção 3: Bloqueios */}
+									{abaAtiva === 'bloqueios' && (
+										<div className="max-w-3xl">
+											{organizacao ? (
+												<CartaoBloqueios agenda={agenda} />
+											) : (
+												<div className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-6 shadow-sutil">
+													<h3 className="text-base font-semibold text-cor-fonte-primaria">
+														Bloqueios pontuais da agenda
+													</h3>
+													<p className="mt-2 text-xs leading-5 text-cor-fonte-secundaria">
+														Os bloqueios para feriados, férias e manutenções são configurados
+														após o primeiro cadastro da empresa. Finalize o preenchimento dos
+														dados nas abas de Empresa e Atendimento para liberar esta área.
+													</p>
+													<button
+														type="button"
+														onClick={() => mudarAba('empresa')}
+														className="mt-4 h-10 rounded-lg bg-cor-primaria-suave px-4 text-xs font-semibold text-cor-primaria-escura transition-colors hover:bg-cor-primaria/20 [touch-action:manipulation]"
+													>
+														Ir para dados da empresa
+													</button>
+												</div>
+											)}
+										</div>
+									)}
+								</div>
+							</form>
+
+							<div className="mt-6 flex items-center gap-3 lg:hidden">
+								{!cadastrando && possuiAlteracoes && (
+									<Botao
+										variante="outline"
+										onClick={descartarAlteracoes}
+										disabled={salvando}
+										className="h-11"
+									>
+										Descartar
+									</Botao>
+								)}
+								<BotaoSalvarConfiguracoes
+									salvando={salvando}
+									cadastrando={cadastrando}
+									desabilitado={!formulario}
+									className="flex-1"
+								/>
+							</div>
+						</>
+					)}
 				</>
 			)}
 		</LayoutPainel>
