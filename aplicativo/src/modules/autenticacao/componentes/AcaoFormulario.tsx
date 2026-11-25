@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes } from 'react';
+import { Botao } from '../../../components/Botao';
 
 interface PropriedadesAcaoFormulario
 	extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,15 +10,19 @@ export function AcaoFormulario({
 	children,
 	carregando = false,
 	disabled,
+	className = '',
 	...propriedades
 }: PropriedadesAcaoFormulario) {
 	return (
-		<button
-			className="flex h-11 w-full items-center justify-center rounded-lg bg-marca-500 px-4 text-[13px] font-semibold text-petroleo transition hover:bg-marca-600 disabled:cursor-not-allowed disabled:opacity-60"
-			disabled={disabled || carregando}
+		<Botao
+			variante="primario"
+			larguraTotal
+			carregando={carregando}
+			disabled={disabled}
+			className={`h-11 ${className}`}
 			{...propriedades}
 		>
 			{carregando ? 'Aguarde...' : children}
-		</button>
+		</Botao>
 	);
 }
