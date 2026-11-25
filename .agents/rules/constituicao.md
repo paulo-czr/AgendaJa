@@ -76,6 +76,7 @@
 7.1. **Estado Assíncrono:** Todas as requisições, caches, invalidações e mutações de dados no `aplicativo` devem ser gerenciadas pelo **TanStack Query** (`useQuery`, `useMutation`), evitando estados globais manuais duplicados para dados vindos da API.
 7.2. **Uso Obrigatório de Skills de Design (`.agents/`):** Antes de criar ou refatorar qualquer componente visual ou página no `aplicativo/`, o agente deve obrigatoriamente consultar e aplicar as skills e diretrizes de design presentes na pasta `.agents/` do repositório.
 7.3. **Tokens de Cores e Componentes Base:** Toda interface deve ser construída com **Tailwind CSS** utilizando estritamente os tokens de cores já configurados no projeto (cores primárias, secundárias e cores de fonte) e os componentes base reutilizáveis de `aplicativo/src/components/ui/` (como o `Botao`).
+7.4. **Biblioteca de UI e Microinterações (React Bits):** Para seções de destaque, apresentações visuais, cards interativos e animações de rolagem nas páginas públicas e dashboards, o agente deve utilizar os componentes do catálogo **React Bits** (`https://reactbits.dev`, como `ScrollStack`, `SpotlightCard`, `AnimatedList` e efeitos tipográficos).
 
 ---
 
