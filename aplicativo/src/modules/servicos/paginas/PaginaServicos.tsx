@@ -13,6 +13,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { Botao } from '../../../components/Botao';
 import { LayoutPainel } from '../../../components/LayoutPainel';
+import CountUp from '../../../components/reactbits/CountUp';
 import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { usarAutenticacao } from '../../autenticacao/hooks/usarAutenticacao';
@@ -465,9 +466,9 @@ export function PaginaServicos() {
 						<div className="flex items-center gap-1 rounded-lg bg-cor-fundo p-1">
 							{(
 								[
-									{ id: 'todos', rotulo: `Todos (${servicos.length})` },
-									{ id: 'ativos', rotulo: `Ativos (${contagemAtivos})` },
-									{ id: 'inativos', rotulo: `Inativos (${contagemInativos})` },
+									{ id: 'todos', rotulo: 'Todos', total: servicos.length },
+									{ id: 'ativos', rotulo: 'Ativos', total: contagemAtivos },
+									{ id: 'inativos', rotulo: 'Inativos', total: contagemInativos },
 								] as const
 							).map((item) => {
 								const ativo = filtroStatus === item.id;
@@ -482,7 +483,7 @@ export function PaginaServicos() {
 												: 'text-cor-fonte-secundaria hover:text-cor-fonte-primaria'
 										}`}
 									>
-										{item.rotulo}
+										{item.rotulo} (<CountUp to={item.total} duration={0.5} trigger="load" />)
 									</button>
 								);
 							})}
