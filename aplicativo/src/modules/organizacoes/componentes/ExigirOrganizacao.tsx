@@ -19,7 +19,7 @@ export function ExigirOrganizacao({ children }: { children: ReactNode }) {
 
 	if (carregando) {
 		return (
-			<main className="flex min-h-screen items-center justify-center text-sm text-tinta-suave">
+			<main className="flex min-h-screen items-center justify-center text-sm text-cor-fonte-secundaria">
 				Carregando sua empresa...
 			</main>
 		);
