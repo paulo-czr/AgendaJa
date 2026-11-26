@@ -73,10 +73,80 @@
 
 ## Artigo VII — Frontend, Design System e Gerenciamento de Estado
 
-7.1. **Estado Assíncrono:** Todas as requisições, caches, invalidações e mutações de dados no `aplicativo` devem ser gerenciadas pelo **TanStack Query** (`useQuery`, `useMutation`), evitando estados globais manuais duplicados para dados vindos da API.
-7.2. **Uso Obrigatório de Skills de Design (`.agents/`):** Antes de criar ou refatorar qualquer componente visual ou página no `aplicativo/`, o agente deve obrigatoriamente consultar e aplicar as skills e diretrizes de design presentes na pasta `.agents/` do repositório.
-7.3. **Tokens de Cores e Componentes Base:** Toda interface deve ser construída com **Tailwind CSS** utilizando estritamente os tokens de cores já configurados no projeto (cores primárias, secundárias e cores de fonte) e os componentes base reutilizáveis de `aplicativo/src/components/ui/` (como o `Botao`).
-7.4. **Biblioteca de UI e Microinterações (React Bits):** Para seções de destaque, apresentações visuais, cards interativos e animações de rolagem nas páginas públicas e dashboards, o agente deve utilizar os componentes do catálogo **React Bits** (`https://reactbits.dev`, como `ScrollStack`, `SpotlightCard`, `AnimatedList` e efeitos tipográficos).
+### 7.1 Estado assíncrono
+
+7.1.1. Todas as requisições, caches, invalidações e mutações de dados no `aplicativo/` devem ser gerenciadas pelo **TanStack Query** (`useQuery`, `useMutation`), evitando estados globais manuais duplicados para dados vindos da API.
+
+### 7.2 Fonte da verdade do design
+
+7.2.1. O documento `.specify/memory/design-system.md` é a referência única de tokens, espaçamentos, tipografia, durações de animação e padrões de tela. Em conflito com qualquer outra fonte, ele prevalece.
+
+7.2.2. Antes de criar ou alterar QUALQUER componente ou página em `aplicativo/`, o agente deve, nesta ordem:
+(a) ler `.specify/memory/design-system.md`;
+(b) ler o `SKILL.md` de cada skill aplicável conforme a tabela 7.2.3;
+(c) registrar o que usou no `plan.md`.
+
+7.2.3. Mapa obrigatório de skills (consultar nomes exatos em `.agents/`):
+
+| Quando a tarefa envolve...               | Skill obrigatória       |
+| ---------------------------------------- | ----------------------- |
+| Nova página, layout ou identidade visual | `frontend-design`       |
+| Formulários, tabelas, modais, feedback   | `web-design-guidelines` |
+| Animações, transições, microinterações   | `motion-design`         |
+| Acessibilidade ou responsividade         | `web-design-guidelines` |
+
+7.2.4. Ao concluir a tarefa, deve-se adicionar no `plan.md` as skills consultadas.
+
+### 7.3 Hierarquia de componentes (decidir sempre nesta ordem)
+
+1. **Componente existente** em `aplicativo/src/components/ui/` ou `aplicativo/src/components/`.
+2. **shadcn/ui** (Radix + Tailwind): base para primitivos: botão, input, select, dialog, sheet, dropdown, tabs, tooltip, calendar, table, form, toast (Sonner), skeleton, badge.
+3. **React Bits** (`https://reactbits.dev`): exclusivamente para destaque visual: hero, landing, cards interativos (`SpotlightCard`), listas animadas (`AnimatedList`), rolagem (`ScrollStack`), efeitos de texto. É proibido usar em telas operacionais densas (formulários, tabelas).
+4. **Componente próprio**: permitido apenas se 1–3 não atenderem, mediante justificativa técnica registrada no `plan.md`.
+   7.3.1. Ícones: apenas `lucide-react`. Utilitários de classe: `cn()` (`clsx` + `tailwind-merge`); variantes via `class-variance-authority` (`cva`).
+   7.3.2. Formulários: `react-hook-form` + `zod` (reaproveitando os schemas do servidor sempre que possível). Tabelas: TanStack Table. Gráficos (relatórios): shadcn Charts (Recharts). Datas e agenda: `react-day-picker` (shadcn Calendar) + `date-fns` com locale `pt-BR`.
+   7.3.3. Componentes gerados por bibliotecas (shadcn) mantêm o nome de arquivo original em inglês (ex: `button.tsx`, `skeleton.tsx`, `sonner.tsx`). Isso é exceção expressa ao Artigo 3.1. Componentes autorais de domínio (ex: `CartaoAgendamento.tsx`, `SeletorHorario.tsx`, `CartaoOrganizacao.tsx`) seguem rigorosamente o português.
+   7.3.4. Não instalar nova biblioteca de UI sem emenda prévia a esta Constituição.
+
+### 7.4 Tokens e estilo
+
+7.4.1. Usar apenas tokens de cor e tipografia do tema Tailwind / CSS variables definidos no `design-system.md`. É proibido usar hex, rgb ou valores arbitrários (`bg-[#123456]`, `w-[317px]`) em componentes.
+7.4.2. Mobile-first: toda tela deve funcionar perfeitamente em `360px` antes de ser refinada para desktop.
+7.4.3. Suporte a modo escuro somente se explicitamente definido no `design-system.md`.
+
+### 7.5 Movimento e transições
+
+7.5.1. Biblioteca padrão de animação: `motion` (Framer Motion). CSS/Tailwind (`transition-*`) para hover e foco simples.
+7.5.2. Toda interface deve ter movimento intencional em: entrada de página, abertura e fechamento de modal/sheet/dropdown, entrada de itens em listas, troca de abas, hover/foco/pressionado em elementos interativos e mudanças de estado (`loading` → conteúdo).
+7.5.3. Durações e easings vêm dos tokens do `design-system.md` (referência: `150–250ms` para microinterações, até `400ms` para entradas de página). Nada de animações decorativas longas em fluxos de trabalho.
+7.5.4. Respeitar `prefers-reduced-motion`: todo movimento não essencial deve ser desligado.
+7.5.5. Animar apenas `transform` e `opacity`, nunca `width`, `height` ou `top` (performance).
+
+### 7.6 Estados obrigatórios de interface
+
+Toda tela ou componente que consome dados deve implementar explicitamente:
+
+- **Carregamento:** `Skeleton` (nunca spinner solto na página);
+- **Vazio:** mensagem clara em pt-BR + ação sugerida;
+- **Erro:** mensagem amigável em pt-BR + botão "Tentar novamente";
+- **Sucesso:** toast via **Sonner**.
+  Botões de mutação devem exibir estado `pending` (`carregando`) e ficar desabilitados durante o envio.
+
+### 7.7 Acessibilidade e idioma da interface
+
+Contraste mínimo WCAG AA, navegação por teclado, foco visível, `label` associado em todo input, `aria-*` quando o componente Radix não cobrir. Todo texto exibido ao usuário deve estar em `pt-BR`.
+
+### 7.8 Definição de Pronto (DoD) para UI
+
+Uma tarefa visual só pode ser marcada como concluída quando cumprir todos os critérios:
+
+- [ ] Skills consultadas e registradas no `plan.md`;
+- [ ] Hierarquia de componentes (7.3) respeitada;
+- [ ] Apenas tokens do tema utilizados (7.4);
+- [ ] Transições aplicadas respeitando `prefers-reduced-motion` (7.5);
+- [ ] Estados loading (`Skeleton`), vazio, erro e sucesso (`Sonner`) implementados (7.6);
+- [ ] Testada responsivamente em `360px` e desktop;
+- [ ] Zero uso de `any`.
 
 ---
 

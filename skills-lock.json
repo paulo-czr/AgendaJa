@@ -8,6 +8,13 @@
       "skillPath": "skills/deploy-to-vercel/SKILL.md",
       "computedHash": "66b99dfa063b1c405155e9bffd99c04ca3e312e81b168d540b757bb194b7400a"
     },
+    "motion-design": {
+      "source": "LottieFiles/motion-design-skill",
+      "commit": "d77a9fc8cb371cab1ba5420df5bfd232cd14c9bb",
+      "sourceType": "github",
+      "skillPath": "skills/motion-design/SKILL.md",
+      "computedHash": "be5bc38a720ec04b0c78ebf33b30e2bc8fde2d0cb3c5d4f37d383059d341802f"
+    },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
