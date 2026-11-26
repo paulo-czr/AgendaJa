@@ -1,3 +1,4 @@
+import { MotionConfig } from 'motion/react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ProvedorNotificacoes } from '../lib/notificacoes';
 import { ProvedorAplicativo } from './ProvedorAplicativo';
@@ -60,11 +61,13 @@ function RotasAplicativo() {
 
 export function Aplicativo() {
 	return (
-		<ProvedorAplicativo>
-			<BrowserRouter>
-				<RotasAplicativo />
-				<ProvedorNotificacoes />
-			</BrowserRouter>
-		</ProvedorAplicativo>
+		<MotionConfig reducedMotion="user">
+			<ProvedorAplicativo>
+				<BrowserRouter>
+					<RotasAplicativo />
+					<ProvedorNotificacoes />
+				</BrowserRouter>
+			</ProvedorAplicativo>
+		</MotionConfig>
 	);
 }

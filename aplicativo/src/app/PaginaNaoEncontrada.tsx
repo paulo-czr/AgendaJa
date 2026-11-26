@@ -1,5 +1,7 @@
+import { Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import guaxinimDuvida from '../assets/figuras/guaxinim-duvida-404.png';
+import { Botao } from '../components/Botao';
 import { Logo } from '../components/Logo';
 
 const GRID_4 = [
@@ -91,7 +93,7 @@ function BrilhoPixel({ className = '' }: { className?: string }) {
 	return (
 		<svg
 			viewBox="0 0 16 16"
-			className={`size-3.5 sm:size-4 shrink-0 text-marca-500 ${className}`}
+			className={`size-3.5 sm:size-4 shrink-0 text-cor-primaria ${className}`}
 			fill="currentColor"
 			aria-hidden="true"
 		>
@@ -106,7 +108,7 @@ function TracosCauda({ className = '' }: { className?: string }) {
 	return (
 		<svg
 			viewBox="0 0 32 32"
-			className={`size-7 sm:size-8 text-marca-500 ${className}`}
+			className={`size-7 sm:size-8 text-cor-primaria ${className}`}
 			fill="none"
 			stroke="currentColor"
 			strokeWidth="3.5"
@@ -122,13 +124,13 @@ function TracosCauda({ className = '' }: { className?: string }) {
 
 export function PaginaNaoEncontrada() {
 	return (
-		<div className="relative flex min-h-screen flex-col overflow-hidden bg-superficie font-sans text-tinta">
+		<div className="relative flex min-h-screen flex-col overflow-hidden bg-cor-superficie font-sans text-cor-fonte-primaria">
 			{/* Cabeçalho sutil com logo para navegação rápida */}
 			<header className="relative z-20 w-full px-6 py-5 sm:px-10">
 				<div className="mx-auto flex max-w-6xl items-center justify-between">
 					<Link
 						to="/"
-						className="rounded-lg transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-marca-500"
+						className="rounded-lg transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cor-primaria"
 						title="Ir para a página inicial"
 					>
 						<Logo variante="escuro" />
@@ -143,12 +145,12 @@ export function PaginaNaoEncontrada() {
 					<div className="relative flex w-full flex-1 items-center justify-center">
 						{/* Círculo suave verde-água de fundo */}
 						<div
-							className="absolute -z-10 size-64 sm:size-80 md:size-96 lg:size-[430px] rounded-full bg-marca-50/90 transition-transform"
+							className="absolute -z-10 size-64 sm:size-80 md:size-96 lg:size-[430px] rounded-full bg-cor-primaria-suave/90 transition-transform"
 							aria-hidden="true"
 						/>
 
 						{/* Elementos decorativos ao redor do guaxinim */}
-						<BrilhoPixel className="absolute -top-3 left-6 sm:top-2 sm:left-10 animate-pulse" />
+						<BrilhoPixel className="absolute -top-3 left-6 sm:top-2 sm:left-10" />
 						<BrilhoPixel className="absolute top-10 right-8 sm:top-8 sm:right-14 opacity-80" />
 						<TracosCauda className="absolute bottom-14 left-2 sm:bottom-16 sm:left-4" />
 
@@ -163,7 +165,7 @@ export function PaginaNaoEncontrada() {
 
 							{/* Sombra suave no chão */}
 							<div
-								className="mt-[-12px] h-3 w-4/5 max-w-[340px] rounded-full bg-[#0e2939]/10 blur-[2px]"
+								className="mt-[-12px] h-3 w-4/5 max-w-[340px] rounded-full bg-cor-secundaria/10 blur-[2px]"
 								aria-hidden="true"
 							/>
 						</div>
@@ -177,39 +179,27 @@ export function PaginaNaoEncontrada() {
 						</div>
 
 						{/* Título Principal */}
-						<h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[42px] leading-tight text-tinta">
-							Página <span className="text-marca-500">não</span> encontrada
+						<h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-[42px] leading-tight text-cor-fonte-primaria">
+							Página <span className="text-cor-primaria">não</span> encontrada
 						</h1>
 
 						{/* Mensagem explicativa amigável */}
-						<p className="mt-4 max-w-md text-base leading-relaxed text-tinta-suave sm:text-lg">
-							Parece que esta página se perdeu por aí...
-							<br className="hidden sm:inline" /> Mas não se preocupe, vamos te ajudar
-							a voltar!
+						<p className="mt-4 max-w-md text-base leading-relaxed text-cor-fonte-secundaria sm:text-lg">
+							Parece que esta página se perdeu por aí.
+							<br className="hidden sm:inline" /> Vamos te ajudar a voltar para
+							o caminho certo.
 						</p>
 
 						{/* Botão de Retorno */}
 						<div className="mt-8">
-							<Link
-								to="/"
-								className="inline-flex items-center justify-center gap-2.5 rounded-full bg-marca-500 px-7 py-3.5 text-base font-semibold text-white shadow-md shadow-marca-500/25 transition-all duration-200 hover:bg-marca-600 hover:shadow-lg hover:shadow-marca-500/35 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-marca-500"
-							>
-								{/* Ícone de Início / Home arredondado */}
-								<svg
-									className="size-5 shrink-0"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									strokeWidth={2.2}
-									aria-hidden="true"
+							<Link to="/">
+								<Botao
+									variante="primario"
+									tamanho="grande"
+									iconeEsquerda={Home}
 								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-									/>
-								</svg>
-								<span>Voltar para o início</span>
+									Voltar para o início
+								</Botao>
 							</Link>
 						</div>
 					</div>
