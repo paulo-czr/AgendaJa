@@ -1,11 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import type { PapelUsuario } from '../servicos/autenticacaoServico';
+import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { AcaoFormulario } from '../componentes/AcaoFormulario';
 import { CampoTexto } from '../componentes/CampoTexto';
 import { CartaoAutenticacao } from '../componentes/CartaoAutenticacao';
 import { usarAutenticacao } from '../hooks/usarAutenticacao';
+import type { PapelUsuario } from '../servicos/autenticacaoServico';
 
 export function PaginaCadastro() {
 	const [nome, definirNome] = useState('');
@@ -20,7 +21,13 @@ export function PaginaCadastro() {
 		evento.preventDefault();
 		autenticacao.cadastrar.mutate(
 			{ nome, email, senha, telefone, role },
-			{ onSuccess: () => navegar('/verificar-email', { replace: true }) },
+			{
+				onSuccess: (resposta) => {
+					notificar.sucesso(resposta.mensagem);
+					navegar('/verificar-email', { replace: true });
+				},
+				onError: (falha) => notificar.erro(obterMensagemErro(falha)),
+			},
 		);
 	}
 
@@ -70,11 +77,14 @@ export function PaginaCadastro() {
 					maxLength={72}
 					required
 				/>
-				<label className="block space-y-2 text-sm font-medium text-slate-700" htmlFor="role">
+				<label
+					className="block space-y-2 text-xs font-medium text-cor-fonte-primaria"
+					htmlFor="role"
+				>
 					Tipo de conta
 					<select
 						id="role"
-						className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3"
+						className="h-11 w-full rounded-lg border border-cor-borda bg-cor-fundo px-3 text-[13px] text-cor-fonte-primaria transition-colors focus:border-cor-primaria focus:bg-cor-superficie focus:outline-none focus:ring-2 focus:ring-cor-primaria/20"
 						value={role}
 						onChange={(evento) => {
 							if (
@@ -89,11 +99,6 @@ export function PaginaCadastro() {
 						<option value="prestador">Prestador</option>
 					</select>
 				</label>
-				{autenticacao.cadastrar.isError && (
-					<p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
-						{obterMensagemErro(autenticacao.cadastrar.error)}
-					</p>
-				)}
 				<AcaoFormulario
 					type="submit"
 					carregando={autenticacao.cadastrar.isPending}
@@ -101,9 +106,12 @@ export function PaginaCadastro() {
 					Criar conta
 				</AcaoFormulario>
 			</form>
-			<p className="mt-6 text-center text-sm text-slate-500">
+			<p className="mt-6 text-center text-[13px] text-cor-fonte-secundaria">
 				Já tem uma conta?{' '}
-				<Link className="font-semibold text-marca-700" to="/entrar">
+				<Link
+					className="font-semibold text-cor-primaria-escura hover:underline"
+					to="/entrar"
+				>
 					Entrar
 				</Link>
 			</p>

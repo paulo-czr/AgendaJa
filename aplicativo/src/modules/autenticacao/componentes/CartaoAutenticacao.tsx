@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { icones } from '../../../assets/icones';
 import { Logo } from '../../../components/Logo';
+import BlurText from '../../../components/reactbits/BlurText';
 
 interface PropriedadesCartaoAutenticacao {
 	titulo: string;
@@ -10,9 +11,8 @@ interface PropriedadesCartaoAutenticacao {
 }
 
 /**
- * Layout das telas de autenticação. Reúne elementos da identidade visual:
- * painel azul-petróleo com ondas suaves de fundo, selo ilustrado da marca,
- * manchete em dois tons e campos do formulário.
+ * Layout das telas de autenticação seguindo o Design System do AgendaJá:
+ * painel lateral em cor secundária com selo da marca e área de formulário limpa.
  */
 export function CartaoAutenticacao({
 	titulo,
@@ -20,19 +20,10 @@ export function CartaoAutenticacao({
 	children,
 }: PropriedadesCartaoAutenticacao) {
 	return (
-		<main className="grid min-h-screen bg-superficie lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-			<aside className="relative hidden flex-col justify-between overflow-hidden bg-petroleo px-12 py-10 lg:flex">
-				{/* Ondas orgânicas sutis de fundo do painel petróleo */}
-				<div
-					className="pointer-events-none absolute -top-16 -right-24 h-[560px] w-[360px] rounded-[100%] bg-[#12384c]/50 blur-3xl"
-					aria-hidden="true"
-				/>
-				<div
-					className="pointer-events-none absolute -bottom-20 -left-20 h-80 w-80 rounded-full bg-[#12384c]/40 blur-2xl"
-					aria-hidden="true"
-				/>
+		<main className="grid min-h-screen bg-cor-fundo lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+			<aside className="relative hidden flex-col justify-between overflow-hidden bg-cor-secundaria px-12 py-10 lg:flex">
 				<svg
-					className="pointer-events-none absolute top-0 right-0 h-full w-48 text-[#143b4f]/35 select-none"
+					className="pointer-events-none absolute top-0 right-0 h-full w-44 text-cor-secundaria-suave/60 select-none"
 					viewBox="0 0 160 800"
 					fill="currentColor"
 					preserveAspectRatio="none"
@@ -41,7 +32,11 @@ export function CartaoAutenticacao({
 					<path d="M160,0 C90,180 20,320 60,480 C100,620 160,720 160,800 Z" />
 				</svg>
 
-				<Link to="/" aria-label="AgendaJá — página inicial" className="relative z-10">
+				<Link
+					to="/"
+					aria-label="AgendaJá — página inicial"
+					className="relative z-10 w-fit"
+				>
 					<Logo variante="claro" />
 				</Link>
 
@@ -49,38 +44,40 @@ export function CartaoAutenticacao({
 					<img
 						src={icones.seloAgenda}
 						alt=""
-						width={116}
-						height={116}
+						width={104}
+						height={104}
 						className="mb-8"
 					/>
-					<p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-marca-500">
+					<p className="text-xs font-medium text-cor-primaria">
 						Agendamentos do seu jeito
 					</p>
-					<h2 className="mt-4 text-[34px] font-bold leading-[1.25] text-white">
-						Sua agenda organizada,{' '}
-						<span className="text-marca-500">sem perder tempo.</span>
+					<h2 className="mt-3 text-3xl font-semibold leading-tight text-cor-fonte-invertida">
+						<BlurText
+							text="Sua agenda organizada, sem perder tempo"
+							delay={60}
+							animateBy="words"
+							direction="top"
+							trigger="load"
+						/>
 					</h2>
-					<p className="mt-5 text-[15px] leading-relaxed text-nevoa-clara">
-						Horários, clientes e serviços em um só lugar, com o status de
-						cada atendimento sempre à vista.
+					<p className="mt-4 text-sm leading-relaxed text-cor-fonte-invertida-suave">
+						Horários, clientes e serviços em um só lugar, com o status de cada
+						atendimento sempre à vista.
 					</p>
 				</div>
 
 				<div className="relative z-10">
-					<div className="mb-6 h-px w-44 bg-petroleo-700" />
-					<p className="text-[13px] font-medium text-white">Agenda simples.</p>
-					<p className="mt-1 text-[11px] text-nevoa-escura">
-						Seu tempo bem cuidado.
+					<div className="mb-5 h-px w-40 bg-cor-secundaria-borda" />
+					<p className="text-xs font-medium text-cor-fonte-invertida">
+						Agenda simples
+					</p>
+					<p className="mt-1 text-[11px] text-cor-fonte-invertida-mutada">
+						Seu tempo bem cuidado
 					</p>
 				</div>
 			</aside>
 
-			<div className="relative flex items-center justify-center overflow-hidden px-4 py-10 sm:px-8">
-				{/* Fundo suave com curva verde-água no canto */}
-				<div
-					className="pointer-events-none absolute -top-24 -right-24 h-[440px] w-[440px] rounded-full bg-marca-50/70 blur-3xl"
-					aria-hidden="true"
-				/>
+			<div className="flex items-center justify-center px-4 py-10 sm:px-8">
 				<div className="w-full max-w-[440px]">
 					<Link
 						to="/"
@@ -90,15 +87,12 @@ export function CartaoAutenticacao({
 						<Logo />
 					</Link>
 
-					<section className="rounded-2xl bg-white p-7 shadow-painel sm:p-8">
+					<section className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-7 shadow-sutil sm:p-8">
 						<header className="mb-7">
-							<p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-marca-700">
-								Sua rotina em dia
-							</p>
-							<h1 className="mt-2 text-[26px] font-bold leading-tight text-tinta">
+							<h1 className="text-2xl font-semibold tracking-tight text-cor-fonte-primaria">
 								{titulo}
 							</h1>
-							<p className="mt-2 text-[13px] leading-relaxed text-tinta-suave">
+							<p className="mt-2 text-[13px] leading-relaxed text-cor-fonte-secundaria">
 								{descricao}
 							</p>
 						</header>

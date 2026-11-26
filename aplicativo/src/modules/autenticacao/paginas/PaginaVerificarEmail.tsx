@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { AcaoFormulario } from '../componentes/AcaoFormulario';
 import { CampoTexto } from '../componentes/CampoTexto';
@@ -14,12 +15,18 @@ export function PaginaVerificarEmail() {
 
 	function verificar(evento: FormEvent<HTMLFormElement>): void {
 		evento.preventDefault();
-		autenticacao.verificarEmail.mutate(token);
+		autenticacao.verificarEmail.mutate(token, {
+			onSuccess: (resposta) => notificar.sucesso(resposta.mensagem),
+			onError: (falha) => notificar.erro(obterMensagemErro(falha)),
+		});
 	}
 
 	function reenviar(evento: FormEvent<HTMLFormElement>): void {
 		evento.preventDefault();
-		autenticacao.reenviarVerificacao.mutate(email);
+		autenticacao.reenviarVerificacao.mutate(email, {
+			onSuccess: (resposta) => notificar.sucesso(resposta.mensagem),
+			onError: (falha) => notificar.erro(obterMensagemErro(falha)),
+		});
 	}
 
 	return (
@@ -36,16 +43,6 @@ export function PaginaVerificarEmail() {
 					autoComplete="one-time-code"
 					required
 				/>
-				{autenticacao.verificarEmail.isSuccess && (
-					<p className="rounded-xl bg-marca-50 px-3 py-2 text-sm text-marca-700" role="status">
-						{autenticacao.verificarEmail.data.mensagem}
-					</p>
-				)}
-				{autenticacao.verificarEmail.isError && (
-					<p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
-						{obterMensagemErro(autenticacao.verificarEmail.error)}
-					</p>
-				)}
 				<AcaoFormulario
 					type="submit"
 					carregando={autenticacao.verificarEmail.isPending}
@@ -53,9 +50,11 @@ export function PaginaVerificarEmail() {
 					Verificar e-mail
 				</AcaoFormulario>
 			</form>
-			<div className="my-6 border-t border-slate-100" />
+			<div className="my-6 border-t border-cor-borda" />
 			<form className="space-y-4" onSubmit={reenviar}>
-				<p className="text-sm text-slate-500">Não recebeu o link? Solicite outro.</p>
+				<p className="text-xs text-cor-fonte-secundaria">
+					Não recebeu o link? Solicite outro.
+				</p>
 				<CampoTexto
 					id="email-reenvio"
 					rotulo="E-mail cadastrado"
@@ -66,16 +65,6 @@ export function PaginaVerificarEmail() {
 					onChange={(evento) => definirEmail(evento.target.value)}
 					required
 				/>
-				{autenticacao.reenviarVerificacao.isSuccess && (
-					<p className="rounded-xl bg-marca-50 px-3 py-2 text-sm text-marca-700" role="status">
-						{autenticacao.reenviarVerificacao.data.mensagem}
-					</p>
-				)}
-				{autenticacao.reenviarVerificacao.isError && (
-					<p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
-						{obterMensagemErro(autenticacao.reenviarVerificacao.error)}
-					</p>
-				)}
 				<AcaoFormulario
 					type="submit"
 					carregando={autenticacao.reenviarVerificacao.isPending}
@@ -83,8 +72,11 @@ export function PaginaVerificarEmail() {
 					Reenviar link
 				</AcaoFormulario>
 			</form>
-			<p className="mt-6 text-center text-sm text-slate-500">
-				<Link className="font-semibold text-marca-700" to="/entrar">
+			<p className="mt-6 text-center text-[13px] text-cor-fonte-secundaria">
+				<Link
+					className="font-semibold text-cor-primaria-escura hover:underline"
+					to="/entrar"
+				>
 					Voltar para entrar
 				</Link>
 			</p>

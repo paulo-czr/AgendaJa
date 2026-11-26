@@ -18,7 +18,7 @@ export function RotaProtegida({
 
 	if (carregando) {
 		return (
-			<main className="flex min-h-screen items-center justify-center text-sm text-slate-500">
+			<main className="flex min-h-screen items-center justify-center bg-cor-fundo text-sm text-cor-fonte-secundaria">
 				Verificando sua sessão...
 			</main>
 		);
@@ -26,9 +26,9 @@ export function RotaProtegida({
 
 	if (erroUsuario) {
 		return (
-			<main className="flex min-h-screen items-center justify-center p-6">
-				<section className="max-w-md rounded-2xl bg-white p-8 text-center shadow-painel">
-					<p className="text-sm text-red-700" role="alert">
+			<main className="flex min-h-screen items-center justify-center bg-cor-fundo p-6">
+				<section className="max-w-md rounded-2xl border border-cor-borda/80 bg-cor-superficie p-8 text-center shadow-sutil">
+					<p className="text-sm text-cor-perigo" role="alert">
 						Não foi possível verificar sua sessão. Confira sua conexão e tente
 						novamente.
 					</p>
@@ -56,8 +56,8 @@ export function RotaProtegida({
 
 	if (papeis?.length && !papeis.includes(usuario.role)) {
 		return (
-			<main className="flex min-h-screen items-center justify-center p-6">
-				<p className="rounded-2xl bg-white p-8 text-slate-700 shadow-painel">
+			<main className="flex min-h-screen items-center justify-center bg-cor-fundo p-6">
+				<p className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-8 text-sm text-cor-fonte-primaria shadow-sutil">
 					Você não tem permissão para acessar esta página.
 				</p>
 			</main>

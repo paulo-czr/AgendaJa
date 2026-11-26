@@ -6,7 +6,6 @@ interface PropriedadesCampoTexto
 	icone?: ReactNode;
 }
 
-/** Campo no padrão do formulário de agendamento do Figma. */
 export function CampoTexto({
 	rotulo,
 	id,
@@ -15,17 +14,20 @@ export function CampoTexto({
 	...propriedades
 }: PropriedadesCampoTexto) {
 	return (
-		<label className="block space-y-2 text-xs font-medium text-tinta" htmlFor={id}>
+		<label
+			className="block space-y-2 text-xs font-medium text-cor-fonte-primaria"
+			htmlFor={id}
+		>
 			{rotulo}
 			<div className="relative">
 				{icone && (
-					<span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-tinta-suave">
+					<span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-cor-fonte-secundaria">
 						{icone}
 					</span>
 				)}
 				<input
 					id={id}
-					className={`h-11 w-full rounded-lg border border-borda bg-superficie px-3 text-[13px] text-tinta transition placeholder:text-tinta-suave focus:border-marca-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-marca-500/25 ${icone ? 'pl-9' : ''} ${className}`}
+					className={`h-11 w-full rounded-lg border border-cor-borda bg-cor-fundo px-3 text-[13px] text-cor-fonte-primaria transition-colors placeholder:text-cor-fonte-secundaria focus:border-cor-primaria focus:bg-cor-superficie focus:outline-none focus:ring-2 focus:ring-cor-primaria/20 ${icone ? 'pl-9' : ''} ${className}`}
 					{...propriedades}
 				/>
 			</div>

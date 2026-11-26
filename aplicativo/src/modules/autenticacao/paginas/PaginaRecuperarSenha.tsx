@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { notificar } from '../../../lib/notificacoes';
 import { obterMensagemErro } from '../../../lib/obter-mensagem-erro';
 import { AcaoFormulario } from '../componentes/AcaoFormulario';
 import { CampoTexto } from '../componentes/CampoTexto';
@@ -8,6 +9,7 @@ import { usarAutenticacao } from '../hooks/usarAutenticacao';
 
 export function PaginaRecuperarSenha() {
 	const [parametros] = useSearchParams();
+	const navegar = useNavigate();
 	const token = parametros.get('token') ?? '';
 	const [email, definirEmail] = useState('');
 	const [senha, definirSenha] = useState('');
@@ -15,12 +17,24 @@ export function PaginaRecuperarSenha() {
 
 	function solicitar(evento: FormEvent<HTMLFormElement>): void {
 		evento.preventDefault();
-		autenticacao.solicitarRecuperacaoSenha.mutate(email);
+		autenticacao.solicitarRecuperacaoSenha.mutate(email, {
+			onSuccess: (resposta) => notificar.sucesso(resposta.mensagem),
+			onError: (falha) => notificar.erro(obterMensagemErro(falha)),
+		});
 	}
 
 	function redefinir(evento: FormEvent<HTMLFormElement>): void {
 		evento.preventDefault();
-		autenticacao.redefinirSenha.mutate({ token, senha });
+		autenticacao.redefinirSenha.mutate(
+			{ token, senha },
+			{
+				onSuccess: (resposta) => {
+					notificar.sucesso(resposta.mensagem);
+					navegar('/entrar', { replace: true });
+				},
+				onError: (falha) => notificar.erro(obterMensagemErro(falha)),
+			},
+		);
 	}
 
 	return (
@@ -45,19 +59,6 @@ export function PaginaRecuperarSenha() {
 						maxLength={72}
 						required
 					/>
-					{autenticacao.redefinirSenha.isSuccess && (
-						<p className="rounded-xl bg-marca-50 px-3 py-2 text-sm text-marca-700" role="status">
-							{autenticacao.redefinirSenha.data.mensagem}{' '}
-							<Link className="font-semibold underline" to="/entrar">
-								Entrar
-							</Link>
-						</p>
-					)}
-					{autenticacao.redefinirSenha.isError && (
-						<p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
-							{obterMensagemErro(autenticacao.redefinirSenha.error)}
-						</p>
-					)}
 					<AcaoFormulario
 						type="submit"
 						carregando={autenticacao.redefinirSenha.isPending}
@@ -77,16 +78,6 @@ export function PaginaRecuperarSenha() {
 						onChange={(evento) => definirEmail(evento.target.value)}
 						required
 					/>
-					{autenticacao.solicitarRecuperacaoSenha.isSuccess && (
-						<p className="rounded-xl bg-marca-50 px-3 py-2 text-sm text-marca-700" role="status">
-							{autenticacao.solicitarRecuperacaoSenha.data.mensagem}
-						</p>
-					)}
-					{autenticacao.solicitarRecuperacaoSenha.isError && (
-						<p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
-							{obterMensagemErro(autenticacao.solicitarRecuperacaoSenha.error)}
-						</p>
-					)}
 					<AcaoFormulario
 						type="submit"
 						carregando={autenticacao.solicitarRecuperacaoSenha.isPending}
@@ -95,8 +86,11 @@ export function PaginaRecuperarSenha() {
 					</AcaoFormulario>
 				</form>
 			)}
-			<p className="mt-6 text-center text-sm text-slate-500">
-				<Link className="font-semibold text-marca-700" to="/entrar">
+			<p className="mt-6 text-center text-[13px] text-cor-fonte-secundaria">
+				<Link
+					className="font-semibold text-cor-primaria-escura hover:underline"
+					to="/entrar"
+				>
 					Voltar para entrar
 				</Link>
 			</p>
