@@ -132,26 +132,13 @@ export function CartaoIdentidadePublica({
 	return (
 		<section
 			aria-label="Prévia da empresa para os clientes"
-			className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-5 shadow-sutil sm:p-6"
+			className="rounded-2xl border border-cor-borda/80 bg-cor-superficie p-5 shadow-sutil sm:p-6 "
 		>
-			<div className="flex items-center justify-between gap-3">
-				<span className="inline-flex items-center gap-2 text-xs font-medium text-cor-primaria-escura">
-					<span
-						aria-hidden="true"
-						className="size-2 rounded-full bg-cor-primaria"
-					/>
-					Visualização do cliente
-				</span>
-				<span className="rounded-md bg-cor-primaria-suave px-2.5 py-1 text-[11px] font-semibold text-cor-primaria-escura">
-					Comprovantes e avisos
-				</span>
-			</div>
-
-			<h2 className="mt-3 text-lg font-semibold text-cor-fonte-primaria">
+			<h2 className=" text-lg font-semibold text-cor-fonte-primaria">
 				Identidade nos agendamentos
 			</h2>
 			<p className="mt-1 text-xs leading-5 text-cor-fonte-secundaria">
-				Como seus clientes visualizam a empresa no WhatsApp e no resumo do agendamento.
+				Como seus clientes visualizam a empresa.
 			</p>
 
 			<div className="mt-6 rounded-xl border border-cor-borda/80 bg-cor-fundo p-5">
@@ -223,11 +210,10 @@ export function CartaoFuncionamento({
 								type="button"
 								onClick={() => alterar('diasAtivos', [...atalho.dias])}
 								aria-pressed={selecionado}
-								className={`h-7 rounded-md px-2.5 text-[11px] font-medium transition-colors [touch-action:manipulation] ${
-									selecionado
-										? 'bg-cor-primaria-suave text-cor-primaria-escura'
-										: 'bg-cor-fundo text-cor-fonte-secundaria hover:bg-cor-superficie-neutra hover:text-cor-fonte-primaria'
-								}`}
+								className={`h-7 rounded-md px-2.5 text-[11px] font-medium transition-colors [touch-action:manipulation] ${selecionado
+									? 'bg-cor-primaria-suave text-cor-primaria-escura'
+									: 'bg-cor-fundo text-cor-fonte-secundaria hover:bg-cor-superficie-neutra hover:text-cor-fonte-primaria'
+									}`}
 							>
 								{atalho.rotulo}
 							</button>
@@ -253,18 +239,16 @@ export function CartaoFuncionamento({
 							onClick={() => alternarDia(dia.numero)}
 							aria-pressed={ativo}
 							aria-label={dia.nome}
-							className={`flex h-14 flex-col items-center justify-center gap-1 rounded-lg border text-xs transition-colors [touch-action:manipulation] active:scale-[0.98] sm:h-16 sm:text-[13px] ${
-								ativo
-									? 'border-cor-primaria/40 bg-cor-primaria-suave font-semibold text-cor-primaria-escura'
-									: 'border-transparent bg-cor-fundo font-medium text-cor-fonte-secundaria hover:bg-cor-superficie-neutra hover:text-cor-fonte-primaria'
-							}`}
+							className={`flex h-14 flex-col items-center justify-center gap-1 rounded-lg border text-xs transition-colors [touch-action:manipulation] active:scale-[0.98] sm:h-16 sm:text-[13px] ${ativo
+								? 'border-cor-primaria/40 bg-cor-primaria-suave font-semibold text-cor-primaria-escura'
+								: 'border-transparent bg-cor-fundo font-medium text-cor-fonte-secundaria hover:bg-cor-superficie-neutra hover:text-cor-fonte-primaria'
+								}`}
 						>
 							<span>{dia.sigla}</span>
 							<span
 								aria-hidden="true"
-								className={`grid size-4 place-items-center rounded-full ${
-									ativo ? 'bg-cor-primaria/20' : ''
-								}`}
+								className={`grid size-4 place-items-center rounded-full ${ativo ? 'bg-cor-primaria/20' : ''
+									}`}
 							>
 								{ativo ? (
 									<img
@@ -346,11 +330,10 @@ export function CartaoPausa({
 					type="button"
 					onClick={alternarPausa}
 					aria-pressed={possuiPausa}
-					className={`h-7 rounded-md px-2.5 text-[11px] font-medium transition-colors [touch-action:manipulation] ${
-						possuiPausa
-							? 'bg-cor-fundo text-cor-fonte-secundaria hover:bg-cor-perigo-fundo hover:text-cor-perigo'
-							: 'bg-cor-primaria-suave text-cor-primaria-escura hover:bg-cor-primaria/20'
-					}`}
+					className={`h-7 rounded-md px-2.5 text-[11px] font-medium transition-colors [touch-action:manipulation] ${possuiPausa
+						? 'bg-cor-fundo text-cor-fonte-secundaria hover:bg-cor-perigo-fundo hover:text-cor-perigo'
+						: 'bg-cor-primaria-suave text-cor-primaria-escura hover:bg-cor-primaria/20'
+						}`}
 				>
 					{possuiPausa ? 'Remover pausa' : 'Definir pausa (12:00–13:00)'}
 				</button>

@@ -270,7 +270,6 @@ export function CartaoBloqueios({ agenda }: PropriedadesCartaoBloqueios = {}) {
 						variante="primario"
 						iconeEsquerda={Plus}
 						carregando={criarBloqueio.isPending}
-						className="h-11 shrink-0 border-cor-primaria text-cor-primaria-escura hover:bg-cor-primaria-suave"
 					>
 						{criarBloqueio.isPending ? 'Adicionando…' : 'Adicionar bloqueio'}
 					</Botao>

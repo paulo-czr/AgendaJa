@@ -74,7 +74,7 @@ function BotaoSalvarConfiguracoes({
 			iconeEsquerda={Save}
 			carregando={salvando}
 			disabled={desabilitado}
-			className={`h-11 lg:w-[184px] lg:text-xs ${className}`}
+			className={`${className}`}
 		>
 			{texto}
 		</Botao>
@@ -468,7 +468,7 @@ export function PaginaConfiguracoes() {
 								>
 									{/* Seção 1: Empresa */}
 									{abaAtiva === 'empresa' && (
-										<div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start">
+										<div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start ">
 											<CartaoDadosEmpresa
 												formulario={formulario}
 												alterar={alterar}

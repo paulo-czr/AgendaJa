@@ -81,13 +81,11 @@ export function CampoConfiguracao({
 				name={name ?? id}
 				aria-invalid={erro ? true : undefined}
 				aria-describedby={descricoes}
-				className={`mt-2 h-11 w-full rounded-lg border px-3.5 text-[13px] text-cor-fonte-primaria transition-colors placeholder:text-cor-fonte-secundaria read-only:cursor-default read-only:bg-cor-superficie-neutra/70 read-only:text-cor-fonte-secundaria focus-visible:bg-cor-superficie focus-visible:outline-none focus-visible:ring-2 read-only:focus-visible:border-cor-borda read-only:focus-visible:bg-cor-superficie-neutra/70 read-only:focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-60 ${
-					tabular ? 'tabular-nums' : ''
-				} ${
-					erro
+				className={`mt-2 h-11 w-full rounded-lg border px-3.5 text-[13px] text-cor-fonte-primaria transition-colors placeholder:text-cor-fonte-secundaria read-only:cursor-default read-only:bg-cor-superficie-neutra/70 read-only:text-cor-fonte-secundaria focus-visible:bg-cor-superficie focus-visible:outline-none focus-visible:ring-2 read-only:focus-visible:border-cor-borda read-only:focus-visible:bg-cor-superficie-neutra/70 read-only:focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-60 ${tabular ? 'tabular-nums' : ''
+					} ${erro
 						? 'border-cor-perigo bg-cor-perigo-fundo/40 focus-visible:border-cor-perigo focus-visible:ring-cor-perigo/25'
 						: 'border-cor-borda bg-cor-fundo focus-visible:border-cor-primaria focus-visible:ring-cor-primaria/25'
-				}`}
+					}`}
 				{...propriedades}
 			/>
 			{erro ? (
